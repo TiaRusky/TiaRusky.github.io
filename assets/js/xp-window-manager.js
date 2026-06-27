@@ -408,3 +408,6 @@ const WindowManager = (() => {
 
   return { open, close, focus, minimize, toggleMaximize, getActiveWindow, updateTaskbar };
 })();
+
+// Expose for inline onclick handlers
+window.WindowManager = WindowManager;

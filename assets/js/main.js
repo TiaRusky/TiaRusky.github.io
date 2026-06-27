@@ -34,7 +34,7 @@ const Explorer = (() => {
 
   return { injectToolbar };
 })();
-
+window.Explorer = Explorer;
 // =========================================================
 // Icon generator — works on any container, uses base64 SVG
 // =========================================================
@@ -58,9 +58,8 @@ const IconGen = (() => {
     if (iconCache_[name]) return iconCache_[name];
     const cfg = iconMap[name] || { color: '#999', shape: 'default' };
     const svg = buildSVG(cfg.color, cfg.shape);
-    const bytes = new TextEncoder().encode(svg);
-    const b64 = btoa(String.fromCharCode(...bytes));
-    iconCache_[name] = 'data:image/svg+xml;base64,' + b64;
+    // SVG strings are ASCII-only, simple btoa works
+    iconCache_[name] = 'data:image/svg+xml;base64,' + btoa(svg);
     return iconCache_[name];
   }
 
@@ -153,7 +152,7 @@ const IconGen = (() => {
 
   return { generate, getIcon };
 })();
-
+window.IconGen = IconGen;
 // =========================================================
 // Documentation App — XP Explorer style
 // =========================================================
@@ -188,7 +187,7 @@ const Documentation = (() => {
 
   return { toggleCategory, openNote, showTree };
 })();
-
+window.Documentation = Documentation;
 // =========================================================
 // Challenges App
 // =========================================================
@@ -254,7 +253,7 @@ const Challenges = (() => {
 
   return { openChallenge, showContent, showList };
 })();
-
+window.Challenges = Challenges;
 // =========================================================
 // Initialize
 // =========================================================

@@ -261,21 +261,11 @@ const XPSounds = (() => {
     }
   }
 
-  // ---- Expose init for early user gesture ----
-  return {
-    init,
-    startup,
-    click,
-    windowOpen,
-    windowClose,
-    minimize,
-    maximize,
-    menuOpen,
-    error,
-    notify,
-    uiClick,
-    toggleMute,
-    isMuted,
-    updateMuteIcon
+  // ---- Expose init for early user gesture ----  return {
+    init, startup, click, windowOpen, windowClose, minimize, maximize,
+    menuOpen, error, notify, uiClick, toggleMute, isMuted, updateMuteIcon
   };
 })();
+
+// Expose for inline onclick handlers
+window.XPSounds = XPSounds;

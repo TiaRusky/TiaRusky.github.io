@@ -106,3 +106,8 @@ document.querySelectorAll('.desktop-icon').forEach(icon => {
     this.classList.add('selected');
   });
 });
+
+// Expose for inline onclick handlers
+window.StartMenu = StartMenu;
+window.Clock = Clock;
+window.ContextMenu = ContextMenu;

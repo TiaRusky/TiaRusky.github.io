@@ -134,3 +134,6 @@ const CryptoManager = (() => {
 
   return { encrypt, decrypt, promptDecrypt, decryptAndShow };
 })();
+
+// Expose for inline onclick handlers
+window.CryptoManager = CryptoManager;
