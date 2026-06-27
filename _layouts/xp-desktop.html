@@ -11,23 +11,23 @@
   <!-- Desktop icons -->
   <div id="desktop" class="xp-desktop">
     <div class="desktop-icon" data-window="mycomputer" ondblclick="WindowManager.open('mycomputer')">
-      <img src="{{ '/assets/img/icons/mycomputer.png' | relative_url }}" alt="">
+      <img data-icon="mycomputer" alt="">
       <span>Risorse del computer</span>
     </div>
     <div class="desktop-icon" data-window="documentation" ondblclick="WindowManager.open('documentation')">
-      <img src="{{ '/assets/img/icons/folder-docs.png' | relative_url }}" alt="">
+      <img data-icon="folder-docs" alt="">
       <span>Documentazione</span>
     </div>
     <div class="desktop-icon" data-window="challenges" ondblclick="WindowManager.open('challenges')">
-      <img src="{{ '/assets/img/icons/folder-shield.png' | relative_url }}" alt="">
+      <img data-icon="folder-shield" alt="">
       <span>Challenge Writeups</span>
     </div>
     <div class="desktop-icon" data-window="about" ondblclick="WindowManager.open('about')">
-      <img src="{{ '/assets/img/icons/user-info.png' | relative_url }}" alt="">
+      <img data-icon="user-info" alt="">
       <span>Chi sono</span>
     </div>
     <div class="desktop-icon" data-window="recyclebin" ondblclick="WindowManager.open('recyclebin')">
-      <img src="{{ '/assets/img/icons/recyclebin.png' | relative_url }}" alt="">
+      <img data-icon="recyclebin" alt="">
       <span>Cestino</span>
     </div>
   </div>
@@ -36,7 +36,7 @@
   <div id="taskbar" class="xp-taskbar">
     <div class="taskbar-start">
       <button id="start-button" class="start-button" onclick="StartMenu.toggle()">
-        <img src="{{ '/assets/img/icons/start.png' | relative_url }}" alt="" class="start-icon">
+        <img data-icon="start" alt="" class="start-icon">
         <span class="start-text">Start</span>
       </button>
     </div>
@@ -56,24 +56,24 @@
     </div>
     <div class="start-menu-items">
       <div class="start-menu-item" onclick="WindowManager.open('documentation');StartMenu.close();">
-        <img src="{{ '/assets/img/icons/folder-docs.png' | relative_url }}" alt="">
+        <img data-icon="folder-docs" alt="">
         <span>Documentazione</span>
       </div>
       <div class="start-menu-item" onclick="WindowManager.open('challenges');StartMenu.close();">
-        <img src="{{ '/assets/img/icons/folder-shield.png' | relative_url }}" alt="">
+        <img data-icon="folder-shield" alt="">
         <span>Challenge Writeups</span>
       </div>
       <div class="start-menu-item" onclick="WindowManager.open('about');StartMenu.close();">
-        <img src="{{ '/assets/img/icons/user-info.png' | relative_url }}" alt="">
+        <img data-icon="user-info" alt="">
         <span>Chi sono</span>
       </div>
       <div class="start-menu-separator"></div>
       <div class="start-menu-item" onclick="WindowManager.open('mycomputer');StartMenu.close();">
-        <img src="{{ '/assets/img/icons/mycomputer.png' | relative_url }}" alt="">
+        <img data-icon="mycomputer" alt="">
         <span>Risorse del computer</span>
       </div>
       <div class="start-menu-item" onclick="WindowManager.open('recyclebin');StartMenu.close();">
-        <img src="{{ '/assets/img/icons/recyclebin.png' | relative_url }}" alt="">
+        <img data-icon="recyclebin" alt="">
         <span>Cestino</span>
       </div>
     </div>

@@ -12,18 +12,18 @@ const WindowManager = (() => {
     documentation: {
       title: '📁 Documentazione',
       icon: '/assets/img/icons/folder-docs.png',
-      width: 680,
+      width: 720,
       height: 480,
       x: 80,
-      y: 50
+      y: 40
     },
     challenges: {
       title: '🛡️ Challenge Writeups',
       icon: '/assets/img/icons/folder-shield.png',
-      width: 700,
+      width: 760,
       height: 500,
-      x: 160,
-      y: 80
+      x: 100,
+      y: 60
     },
     about: {
       title: '👤 Chi sono',
@@ -36,10 +36,10 @@ const WindowManager = (() => {
     mycomputer: {
       title: '💻 Risorse del computer',
       icon: '/assets/img/icons/mycomputer.png',
-      width: 550,
-      height: 400,
-      x: 200,
-      y: 100
+      width: 650,
+      height: 440,
+      x: 160,
+      y: 80
     },
     recyclebin: {
       title: '🗑️ Cestino',
@@ -87,6 +87,18 @@ const WindowManager = (() => {
     } else {
       body.innerHTML = '<p>Contenuto non disponibile.</p>';
     }
+
+    // Inject XP Explorer toolbar for folder-type windows
+    if (id === 'documentation') {
+      Explorer.injectToolbar(body, config.title, () => Documentation.showTree());
+    } else if (id === 'challenges') {
+      Explorer.injectToolbar(body, config.title, () => Challenges.showList());
+    } else if (id === 'mycomputer') {
+      Explorer.injectToolbar(body, config.title, null);
+    }
+
+    // Generate icons in the window body
+    setTimeout(() => IconGen.generate(body), 0);
 
     // Resize handles
     const handles = ['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w'];

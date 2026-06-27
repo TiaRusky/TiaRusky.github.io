@@ -1,28 +1,48 @@
-<!-- Documentation Window Content -->
+<!-- Documentation Window Content - XP Explorer style -->
 <template id="template-documentation">
-  <h2>📁 Documentazione</h2>
-  <p>Appunti processati e organizzati per argomento.</p>
-  
-  {% assign categories = site.data.documentation %}
-  <ul class="doc-tree" id="doc-tree">
-    {% for category in categories %}
-    <li class="doc-category" data-category="{{ category.name | slugify }}">
-      <div class="doc-category-header" onclick="Documentation.toggleCategory(this)">
-        <span class="arrow">▶</span>
-        <span>{{ category.icon }} {{ category.name }}</span>
+  <div class="xp-explorer-layout">
+    <div class="xp-explorer-sidebar">
+      <div class="xp-sidebar-section">
+        <div class="xp-sidebar-title">Documentazione</div>
+        <div class="xp-sidebar-item active" onclick="Documentation.showTree()">
+          <img data-icon="folder-docs" alt=""><span>Tutti gli appunti</span>
+        </div>
       </div>
-      <ul class="doc-notes">
-        {% for note in category.notes %}
-        <li class="doc-note-item" onclick="Documentation.openNote('{{ category.name | slugify }}', '{{ note.slug }}')">
-          📄 {{ note.title }}
+      <div class="xp-sidebar-section">
+        <div class="xp-sidebar-title">Categorie</div>
+        {% for category in site.data.documentation %}
+        <div class="xp-sidebar-item">
+          <img data-icon="folder" alt=""><span>{{ category.icon }} {{ category.name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="xp-explorer-files" id="doc-filepane">
+      <!-- Interactive content: tree view + note viewer -->
+      <ul class="doc-tree" id="doc-tree">
+        {% for category in site.data.documentation %}
+        <li class="doc-category" data-category="{{ category.name | slugify }}">
+          <div class="doc-category-header" onclick="Documentation.toggleCategory(this)">
+            <span class="arrow">▶</span>
+            <span>{{ category.icon }} {{ category.name }}</span>
+          </div>
+          <ul class="doc-notes">
+            {% for note in category.notes %}
+            <li class="doc-note-item" onclick="Documentation.openNote('{{ category.name | slugify }}', '{{ note.slug }}')">
+              📄 {{ note.title }}
+            </li>
+            {% endfor %}
+          </ul>
         </li>
         {% endfor %}
       </ul>
-    </li>
-    {% endfor %}
-  </ul>
-  <div id="doc-content" style="display:none;margin-top:10px;"></div>
-  <div id="doc-back" style="display:none;margin-top:8px;">
-    <button class="xp-button" onclick="Documentation.showTree()">← Indietro</button>
+      <div id="doc-content" style="display:none;padding:8px;"></div>
+      <div id="doc-back" style="display:none;padding:8px;">
+        <button class="xp-button" onclick="Documentation.showTree()">← Indietro</button>
+      </div>
+    </div>
+  </div>
+  <div class="xp-statusbar">
+    <span>{{ site.data.documentation | map: "notes" | size }} appunti</span>
   </div>
 </template>

@@ -1,28 +1,55 @@
-<!-- Challenges Window Content -->
+<!-- Challenges Window Content - XP Explorer style -->
 <template id="template-challenges">
-  <h2>🛡️ Challenge Writeups</h2>
-  <p>Writeup e note delle challenge affrontate su Hack The Box e altre piattaforme.</p>
-  
-  {% assign challenge_list = site.data.challenges %}
-  <ul class="challenge-list" id="challenge-list">
-    {% for challenge in challenge_list %}
-    <li class="challenge-item" data-challenge="{{ challenge.slug }}" data-retired="{{ challenge.retired }}" onclick="Challenges.openChallenge('{{ challenge.slug }}')">
-      <div>
-        <span class="challenge-name">{{ challenge.title }}</span>
-        <span class="challenge-meta"> — {{ challenge.platform }} · {{ challenge.category }} · {{ challenge.difficulty }}</span>
+  <div class="xp-explorer-layout">
+    <div class="xp-explorer-sidebar">
+      <div class="xp-sidebar-section">
+        <div class="xp-sidebar-title">Challenge Writeups</div>
+        <div class="xp-sidebar-item active" onclick="Challenges.showList()">
+          <img data-icon="folder-shield" alt=""><span>Tutte le challenge</span>
+        </div>
       </div>
-      <div>
-        {% if challenge.retired %}
-        <span style="color:#008000;">✓ Pubblico</span>
-        {% else %}
-        <span class="challenge-lock">🔒 Protetto</span>
-        {% endif %}
+      <div class="xp-sidebar-section">
+        <div class="xp-sidebar-title">Piattaforme</div>
+        <div class="xp-sidebar-item">
+          <img data-icon="folder" alt=""><span>Hack The Box</span>
+        </div>
+        <div class="xp-sidebar-item">
+          <img data-icon="folder" alt=""><span>TryHackMe</span>
+        </div>
       </div>
-    </li>
-    {% endfor %}
-  </ul>
-  <div id="challenge-content" style="display:none;margin-top:10px;"></div>
-  <div id="challenge-back" style="display:none;margin-top:8px;">
-    <button class="xp-button" onclick="Challenges.showList()">← Torna alla lista</button>
+      <div class="xp-sidebar-section">
+        <div class="xp-sidebar-title">Categorie</div>
+        <div class="xp-sidebar-item">
+          <img data-icon="folder" alt=""><span>DFIR</span>
+        </div>
+      </div>
+    </div>
+    <div class="xp-explorer-files" id="chal-filepane">
+      <!-- Interactive content: challenge list + content viewer -->
+      <ul class="challenge-list" id="challenge-list">
+        {% for challenge in site.data.challenges %}
+        <li class="challenge-item" data-challenge="{{ challenge.slug }}" data-retired="{{ challenge.retired }}" ondblclick="Challenges.openChallenge('{{ challenge.slug }}')">
+          <div>
+            <span class="challenge-name">{{ challenge.title }}</span>
+            <span class="challenge-meta"> — {{ challenge.platform }} · {{ challenge.category }} · {{ challenge.difficulty }}</span>
+          </div>
+          <div>
+            {% if challenge.retired %}
+            <span style="color:#008000;">✓ Pubblico</span>
+            {% else %}
+            <span class="challenge-lock">🔒 Protetto</span>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <div id="challenge-content" style="display:none;padding:8px;"></div>
+      <div id="challenge-back" style="display:none;padding:8px;">
+        <button class="xp-button" onclick="Challenges.showList()">← Torna alla lista</button>
+      </div>
+    </div>
+  </div>
+  <div class="xp-statusbar">
+    <span>{{ site.data.challenges.size }} challenge</span>
   </div>
 </template>
