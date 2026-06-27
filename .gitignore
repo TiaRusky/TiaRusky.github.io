@@ -1,0 +1,53 @@
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Dependencies
+node_modules/
+vendor/
+Gemfile.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# SENSITIVE DATA — never commit these
+# ============================================================
+
+# Plaintext writeups (generated before encryption)
+*-plaintext.md
+*-plaintext.txt
+*-plaintext.*
+*_plaintext.*
+*_plaintext.md
+*_plaintext.txt
+
+# Any file in these directories named "plaintext" or "secret"
+tools/*plaintext*
+assets/data/challenges/*plaintext*
+tools/*secret*
+
+# Temporary/backup files that could contain writeup drafts
+*.tmp
+*.bak
+*.orig
+*~
+
+# Password files (if you ever create one locally)
+*.pass
+*.password
+password.txt
+secrets.txt
+secrets.yml
+.env
+
+# Documentation drafts (sensitive)
+_drafts/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

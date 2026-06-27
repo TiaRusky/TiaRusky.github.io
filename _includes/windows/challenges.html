@@ -1,0 +1,28 @@
+<!-- Challenges Window Content -->
+<template id="template-challenges">
+  <h2>🛡️ Challenge Writeups</h2>
+  <p>Writeup e note delle challenge affrontate su Hack The Box e altre piattaforme.</p>
+  
+  {% assign challenge_list = site.data.challenges %}
+  <ul class="challenge-list" id="challenge-list">
+    {% for challenge in challenge_list %}
+    <li class="challenge-item" data-challenge="{{ challenge.slug }}" data-retired="{{ challenge.retired }}" onclick="Challenges.openChallenge('{{ challenge.slug }}')">
+      <div>
+        <span class="challenge-name">{{ challenge.title }}</span>
+        <span class="challenge-meta"> — {{ challenge.platform }} · {{ challenge.category }} · {{ challenge.difficulty }}</span>
+      </div>
+      <div>
+        {% if challenge.retired %}
+        <span style="color:#008000;">✓ Pubblico</span>
+        {% else %}
+        <span class="challenge-lock">🔒 Protetto</span>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <div id="challenge-content" style="display:none;margin-top:10px;"></div>
+  <div id="challenge-back" style="display:none;margin-top:8px;">
+    <button class="xp-button" onclick="Challenges.showList()">← Torna alla lista</button>
+  </div>
+</template>

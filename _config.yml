@@ -1,3 +1,14 @@
-theme: jekyll-theme-minimal
-title: TiaRuskii's porrtfolio
-description: Just tryying to do better on cybersecurity
+# TiaRuskii's Cybersecurity Portfolio - Windows XP Theme
+title: TiaRuskii's Portfolio
+description: Cybersecurity journey - Windows XP style
+baseurl: ""
+url: "https://tiarusky.github.io"
+
+# Build settings
+markdown: kramdown
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md

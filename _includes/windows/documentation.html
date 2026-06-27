@@ -1,0 +1,28 @@
+<!-- Documentation Window Content -->
+<template id="template-documentation">
+  <h2>📁 Documentazione</h2>
+  <p>Appunti processati e organizzati per argomento.</p>
+  
+  {% assign categories = site.data.documentation %}
+  <ul class="doc-tree" id="doc-tree">
+    {% for category in categories %}
+    <li class="doc-category" data-category="{{ category.name | slugify }}">
+      <div class="doc-category-header" onclick="Documentation.toggleCategory(this)">
+        <span class="arrow">▶</span>
+        <span>{{ category.icon }} {{ category.name }}</span>
+      </div>
+      <ul class="doc-notes">
+        {% for note in category.notes %}
+        <li class="doc-note-item" onclick="Documentation.openNote('{{ category.name | slugify }}', '{{ note.slug }}')">
+          📄 {{ note.title }}
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+  <div id="doc-content" style="display:none;margin-top:10px;"></div>
+  <div id="doc-back" style="display:none;margin-top:8px;">
+    <button class="xp-button" onclick="Documentation.showTree()">← Indietro</button>
+  </div>
+</template>

@@ -1,0 +1,100 @@
+# Challenges Writeups Data
+
+- title: "Campfire-1"
+  slug: "campfire-1"
+  platform: "Hack The Box"
+  category: "DFIR"
+  difficulty: "Easy"
+  retired: true
+  date: "2026-06-01"
+  content: |
+    ## Campfire-1 — HTB Sherlock
+
+    **Piattaforma:** Hack The Box
+    **Categoria:** DFIR
+    **Difficoltà:** Easy
+    **Data:** Giugno 2026
+
+    ### Scenario
+
+    Un'azienda sospetta un'intrusione nella propria rete. Ci viene fornito
+    un dump della memoria e alcuni log di sistema.
+
+    ### Analisi
+
+    #### Step 1: Identificazione del profilo
+
+    ```
+    volatility -f campfire.raw imageinfo
+    ```
+    Profilo identificato: **Win10x64_19041**
+
+    #### Step 2: Processi sospetti
+
+    ```
+    volatility -f campfire.raw --profile=Win10x64_19041 pslist
+    ```
+    Trovato processo sospetto: `svch0st.exe` (PID 4528) — nome simile a
+    `svchost.exe` per mimetizzarsi.
+
+    #### Step 3: Analisi del malware
+
+    ```
+    volatility -f campfire.raw --profile=Win10x64_19041 malfind -p 4528
+    ```
+    Rilevata iniezione di codice nel processo.
+
+    ### Conclusione
+
+    - Il malware si mascherava da `svch0st.exe`
+    - Comunicava con C2 su `192.168.1[.]100:4444`
+    - Persistenza ottenuta tramite chiave di registro Run
+
+- title: "Bumblebee"
+  slug: "bumblebee"
+  platform: "Hack The Box"
+  category: "DFIR"
+  difficulty: "Medium"
+  retired: true
+  date: "2026-06-15"
+  content: |
+    ## Bumblebee — HTB Sherlock
+
+    **Piattaforma:** Hack The Box
+    **Categoria:** DFIR
+    **Difficoltà:** Medium
+    **Data:** Giugno 2026
+
+    ### Scenario
+
+    Investigazione su un attacco ransomware in un ambiente Active Directory.
+
+    ### Analisi
+
+    #### Step 1: Timeline
+
+    Ricostruzione della timeline degli eventi tramite Windows Event Logs.
+
+    #### Step 2: Lateral movement
+
+    Identificato movimento laterale via WMI e PsExec.
+
+    #### Step 3: Ransomware deployment
+
+    Il ransomware è stato distribuito tramite GPO compromesso.
+
+    ### IOCs
+
+    - MD5: `a1b2c3d4e5f6...`
+    - C2: `10.10.14[.]50:8443`
+    - Registry key: `HKLM\...\Run\Updater`
+
+- title: "Lockpick"
+  slug: "lockpick"
+  platform: "Hack The Box"
+  category: "DFIR"
+  difficulty: "Hard"
+  retired: false
+  date: "2026-06-20"
+  content: "ENCRYPTED:LOCKPICK_DATA_PLACEHOLDER"
+  encrypted: true

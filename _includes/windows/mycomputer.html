@@ -1,0 +1,27 @@
+<!-- My Computer Window Content -->
+<template id="template-mycomputer">
+  <h2>💻 Risorse del computer</h2>
+  <ul class="explorer-list">
+    <li class="explorer-item" ondblclick="WindowManager.open('documentation')">
+      <img src="{{ '/assets/img/icons/folder-docs.png' | relative_url }}" alt="">
+      <div>
+        <strong>Documentazione</strong><br>
+        <small>Appunti e note processate</small>
+      </div>
+    </li>
+    <li class="explorer-item" ondblclick="WindowManager.open('challenges')">
+      <img src="{{ '/assets/img/icons/folder-shield.png' | relative_url }}" alt="">
+      <div>
+        <strong>Challenge Writeups</strong><br>
+        <small>Writeup e soluzioni HTB</small>
+      </div>
+    </li>
+    <li class="explorer-item" ondblclick="WindowManager.open('about')">
+      <img src="{{ '/assets/img/icons/user-info.png' | relative_url }}" alt="">
+      <div>
+        <strong>Chi sono</strong><br>
+        <small>Informazioni personali</small>
+      </div>
+    </li>
+  </ul>
+</template>
