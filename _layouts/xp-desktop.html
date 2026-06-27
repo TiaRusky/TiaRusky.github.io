@@ -43,7 +43,7 @@
     <div class="taskbar-windows" id="taskbar-windows"></div>
     <div class="taskbar-tray">
       <div class="tray-icons">
-        <span class="tray-sound" id="sound-icon" onclick="XPSounds.toggleMute()" title="Audio">🔊</span>
+        <span class="tray-sound" id="sound-icon" onclick="window.XPSounds.toggleMute()" title="Audio">🔊</span>
         <span class="tray-clock" id="tray-clock"></span>
       </div>
     </div>
@@ -145,6 +145,16 @@
     {% endfor %}
   {% endfor %}
 
+  <!-- Stub: prevents "XPSounds is not defined" errors if xp-sounds.js fails -->
+  <script>
+    window.XPSounds = window.XPSounds || {
+      init:function(){}, click:function(){}, startup:function(){},
+      windowOpen:function(){}, windowClose:function(){}, minimize:function(){},
+      maximize:function(){}, menuOpen:function(){}, error:function(){},
+      notify:function(){}, uiClick:function(){}, toggleMute:function(){},
+      isMuted:function(){return false}, updateMuteIcon:function(){}
+    };
+  </script>
   <script src="{{ '/assets/js/xp-crypto.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/xp-sounds.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/xp-window-manager.js' | relative_url }}"></script>

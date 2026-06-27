@@ -11,7 +11,7 @@ const StartMenu = (() => {
     if (isVisible) {
       close();
     } else {
-      XPSounds.menuOpen();
+      window.XPSounds?.menuOpen();
       menu.style.display = 'block';
       btn.classList.add('active');
       

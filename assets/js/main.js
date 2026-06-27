@@ -286,10 +286,10 @@ function tryLoadBliss() {
 function initSoundsOnInteraction() {
   let startupPlayed = false;
   function onInteraction() {
-    XPSounds.init();
+    window.XPSounds?.init();
     if (!startupPlayed) {
       startupPlayed = true;
-      setTimeout(() => XPSounds.startup(), 300);
+      setTimeout(() => window.XPSounds?.startup(), 300);
     }
   }
   ['click', 'keydown', 'touchstart'].forEach(ev => {

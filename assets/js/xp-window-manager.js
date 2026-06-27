@@ -260,11 +260,11 @@ const WindowManager = (() => {
   // ---- Public API ----
 
   function open(id) {
-    XPSounds.click();
+    window.XPSounds?.click();
     // If already exists, focus and possibly un-minimize
     if (windows_[id]) {
       windows_[id].classList.remove('minimized');
-      XPSounds.windowOpen();
+      window.XPSounds?.windowOpen();
       focus(id);
       updateTaskbar();
       return;
@@ -306,7 +306,7 @@ const WindowManager = (() => {
     updateTaskbar();
     
     // Sound
-    XPSounds.windowClose();
+    window.XPSounds?.windowClose();
   }
 
   function focus(id) {
@@ -329,9 +329,9 @@ const WindowManager = (() => {
     win.classList.toggle('minimized');
     if (!win.classList.contains('minimized')) {
       focus(id);
-      XPSounds.windowOpen();
+      window.XPSounds?.windowOpen();
     } else if (activeWindow_ === id) {
-      XPSounds.minimize();
+      window.XPSounds?.minimize();
       // Focus the next non-minimized window
       const keys = Object.keys(windows_).filter(k => 
         k !== id && windows_[k] && !windows_[k].classList.contains('minimized')
@@ -349,7 +349,7 @@ const WindowManager = (() => {
     win.classList.toggle('maximized');
     if (win.classList.contains('maximized')) {
       // Store pre-maximize dimensions
-      XPSounds.maximize();
+      window.XPSounds?.maximize();
       win._preMaximize = {
         width: win.offsetWidth,
         height: win.offsetHeight,
@@ -358,7 +358,7 @@ const WindowManager = (() => {
       };
     } else if (win._preMaximize) {
       // Restore pre-maximize dimensions
-      XPSounds.windowOpen();
+      window.XPSounds?.windowOpen();
       win.style.width = win._preMaximize.width + 'px';
       win.style.height = win._preMaximize.height + 'px';
       win.style.left = win._preMaximize.left + 'px';

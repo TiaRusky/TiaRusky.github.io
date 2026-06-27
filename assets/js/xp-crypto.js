@@ -123,7 +123,7 @@ const CryptoManager = (() => {
     if (plaintext === null) {
       error.textContent = '❌ Chiave segreta errata.';
       error.style.display = 'block';
-      XPSounds.error();
+      window.XPSounds?.error();
       return;
     }
 
