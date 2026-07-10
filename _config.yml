@@ -1,6 +1,6 @@
-# TiaRuskii's Cybersecurity Portfolio - Windows XP Theme
+# TiaRuskii's Cybersecurity Portfolio - Linux Terminal Theme
 title: TiaRuskii's Portfolio
-description: Cybersecurity journey - Windows XP style
+description: Cybersecurity journey through an interactive Linux shell
 baseurl: ""
 url: "https://tiarusky.github.io"
 
@@ -12,3 +12,4 @@ exclude:
   - node_modules
   - vendor
   - README.md
+  - backup
