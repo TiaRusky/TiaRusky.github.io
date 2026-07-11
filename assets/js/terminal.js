@@ -102,9 +102,9 @@
       { label: 'Coffee Level', value: '0%' }
     ],
     links: [
-      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mattia-russo-b7ba89295/' },
-      { name: 'GitHub', url: 'https://github.com/TiaRusky' },
-      { name: 'Hack The Box', url: 'https://app.hackthebox.com/public/users/1431018' }
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mattia-russo-b7ba89295/', icon: '💼' },
+      { name: 'GitHub', url: 'https://github.com/TiaRusky', icon: '🐙' },
+      { name: 'Hack The Box', url: 'https://app.hackthebox.com/public/users/1431018', icon: '🎯' }
     ],
     logos: {
       cyberoo: 'assets/images/cyberoo_italia_logo.jpg'
@@ -767,7 +767,7 @@
         ...PROFILE_DATA.experience.map(e => '  ' + e),
         ...PROFILE_DATA.projects.map(p => '  ' + p + '/'),
         ...PROFILE_DATA.funFacts.map(f => '  ' + f.label + ': ' + f.value),
-        ...PROFILE_DATA.links.map(l => '  ' + l.name)
+        ...PROFILE_DATA.links.map(l => '  ' + l.icon + ' ' + l.name + ' →')
       ];
       const maxContentLen = Math.max(...allPanelTexts.map(t => t.length));
       const panelWidth = Math.max(52, maxContentLen + 4);
@@ -879,7 +879,8 @@
       // Links
       makeSection('Connect');
       for (const link of PROFILE_DATA.links) {
-        const linkLine = makeHtmlLine(`  <a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>`, 'profile-link');
+        const linkHtml = `  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="profile-connect-link" title="Open ${link.name}"><span class="connect-icon">${link.icon}</span><span class="connect-name">${link.name}</span><span class="connect-arrow">→</span></a>`;
+        const linkLine = makeHtmlLine(linkHtml, 'profile-link');
         if (!reduced) await this.sleep(200);
       }
 
