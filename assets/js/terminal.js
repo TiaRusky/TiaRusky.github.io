@@ -77,8 +77,7 @@
     education: {
       university: 'Sapienza Università di Roma',
       degree: 'Computer Science + Cybersecurity (Master degree)',
-      skills: 'Digital forensics, Reverse engineering, Network security',
-      logo: 'assets/images/sapienza-university-of-rome-vector-logo-11574040616palzsdxmqd.png'
+      skills: 'Digital forensics, Reverse engineering, Network security'
     },
     interests: [
       'Cybersecurity', 'Operating Systems', 'Linux', 'Backend', 'AI',
@@ -99,7 +98,6 @@
       '2025 - Today: Cyberoo SOC Analyst Level 3'
     ],
     projects: ['SOCGraph', 'A failing Anti-Evasion tool based on SE, ML and DBI (never worked correctly)'],
-    philosophy: 'I like building things that solve real problems.',
     funFacts: [
       { label: 'Coffee Level', value: '0%' }
     ],
@@ -109,7 +107,6 @@
       { name: 'Hack The Box', url: 'https://app.hackthebox.com/public/users/1431018' }
     ],
     logos: {
-      sapienza: 'assets/images/sapienza-university-of-rome-vector-logo-11574040616palzsdxmqd.png',
       cyberoo: 'assets/images/cyberoo_italia_logo.jpg'
     }
   };
@@ -759,7 +756,22 @@
       await this.sleep(stepDelay);
 
       // Profile panel
-      const panelWidth = 52;
+      const allPanelTexts = [
+        '  Name:        ' + PROFILE_DATA.identity.name,
+        '  Role:        ' + PROFILE_DATA.identity.role,
+        '  ' + PROFILE_DATA.identity.description,
+        '  University:  ' + PROFILE_DATA.education.university,
+        '  Degree:      ' + PROFILE_DATA.education.degree,
+        '  Skills:      ' + PROFILE_DATA.education.skills,
+        ...PROFILE_DATA.interests.map(i => '  - ' + i),
+        ...PROFILE_DATA.experience.map(e => '  ' + e),
+        ...PROFILE_DATA.projects.map(p => '  ' + p + '/'),
+        ...PROFILE_DATA.funFacts.map(f => '  ' + f.label + ': ' + f.value),
+        ...PROFILE_DATA.links.map(l => '  ' + l.name)
+      ];
+      const maxContentLen = Math.max(...allPanelTexts.map(t => t.length));
+      const panelWidth = Math.max(52, maxContentLen + 4);
+
       const makeLine = (text, cls) => {
         const width = panelWidth - 2;
         if (text.length === 0) {
@@ -783,6 +795,7 @@
       const makeHtmlLine = (html, cls) => {
         const line = document.createElement('div');
         line.className = 'line profile-box-line' + (cls ? ' ' + cls : '');
+        line.style.width = panelWidth + 'ch';
         line.innerHTML = '<span class="box-border">║</span><span class="box-content">' + html + '</span><span class="box-border">║</span>';
         this.output.appendChild(line);
         this.scrollToBottom();
@@ -805,7 +818,7 @@
 
       // Education
       makeSection('Education');
-      makeHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`);
+      makeLine('  University:  ' + PROFILE_DATA.education.university);
       makeLine('  Degree:      ' + PROFILE_DATA.education.degree);
       makeLine('  Skills:      ' + PROFILE_DATA.education.skills);
       await this.sleep(stepDelay);
@@ -848,11 +861,6 @@
         makeLine('  ' + proj + '/', 'info');
         if (!reduced) await this.sleep(200);
       }
-      await this.sleep(stepDelay);
-
-      // Philosophy
-      makeSection('Philosophy');
-      makeLine('  "' + PROFILE_DATA.philosophy + '"');
       await this.sleep(stepDelay);
 
       // Fun Facts
