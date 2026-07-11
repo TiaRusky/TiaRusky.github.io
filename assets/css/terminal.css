@@ -387,6 +387,26 @@ body {
   color: var(--fg-dim);
 }
 
+.output .coffee-warning {
+  color: var(--red);
+  text-shadow: 0 0 4px rgba(255, 95, 86, 0.35);
+  animation: coffee-blink 1s step-end infinite;
+}
+
+@keyframes coffee-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.output .profile-link a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.output .profile-link a:hover {
+  color: var(--fg-bright);
+}
+
 /* Train animation for `sl` easter egg */
 .train-container {
   position: absolute;

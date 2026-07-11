@@ -69,22 +69,21 @@
   // Profile Data (for interactive whoami)
   // =========================================================
   const PROFILE_DATA = {
-    identita: {
-      nome: 'TiaRuskii',
-      ruolo: 'Cybersecurity Learner',
-      descrizione: 'Appassionato di DFIR, penetration testing e threat intelligence.'
+    identity: {
+      name: 'TiaRuskii',
+      role: 'Cybersecurity Learner',
+      description: 'Trying to improve my skills. Working as a level 3 SOC analyst.'
     },
-    studi: {
-      universita: 'Politecnico di Torino',
-      laurea: 'Ingegneria Informatica',
-      materie: 'Sicurezza Informatica, Reti, Sistemi Operativi',
-      competenze: 'Analisi forense, Reverse engineering, Network security'
+    education: {
+      university: 'Sapienza Università di Roma',
+      degree: 'Computer Science + Cybersecurity (Master degree)',
+      skills: 'Digital forensics, Reverse engineering, Network security'
     },
-    ambiti: [
-      'Cybersecurity', 'Sistemi Operativi', 'Linux', 'Backend', 'AI',
+    interests: [
+      'Cybersecurity', 'Operating Systems', 'Linux', 'Backend', 'AI',
       'Computer Vision', 'Machine Learning', 'Cloud', 'DevOps'
     ],
-    competenzeCyber: [
+    cyberSkills: [
       { name: 'DFIR', pct: 50 },
       { name: 'Malware Analysis', pct: 75 },
       { name: 'OSINT', pct: 25 },
@@ -93,17 +92,20 @@
       { name: 'Cryptography', pct: 50 },
       { name: 'Penetration Testing', pct: 50 }
     ],
-    esperienze: [
-      '2022-Oggi: Studi in Ingegneria Informatica',
-      '2023: Risoluzione di casi DFIR su Hack The Box',
-      '2024: Sviluppo di tool di network monitoring',
-      '2025: Partecipazione a CTF e challenge di sicurezza'
+    experience: [
+      '2019 - 2022: Computer Science at Sapienza Università di Roma',
+      '2022 - 2025: Master\'s Degree in Cybersecurity at Sapienza Università di Roma',
+      '2025 - Today: Cyberoo SOC Analyst Level 3'
     ],
-    progetti: ['portfolio', 'vision-ai', 'network-monitor', 'dfir-toolkit'],
-    filosofia: 'I like building things that solve real problems.',
-    curiosita: [
-      { label: 'Favorite OS', value: 'Ubuntu' },
-      { label: 'Coffee Level', value: '100%' }
+    projects: ['SOCGraph', 'A failing Anti-Evasion tool based on SE, ML and DBI (never worked correctly)'],
+    philosophy: 'I like building things that solve real problems.',
+    funFacts: [
+      { label: 'Coffee Level', value: '0%' }
+    ],
+    links: [
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mattia-russo-b7ba89295/' },
+      { name: 'GitHub', url: 'https://github.com/TiaRusky' },
+      { name: 'Hack The Box', url: 'https://app.hackthebox.com/profile/your-id' }
     ]
   };
 
@@ -478,6 +480,15 @@
       return line;
     }
 
+    printHtmlLine(html, className) {
+      const line = document.createElement('div');
+      line.className = 'line' + (className ? ' ' + className : '');
+      line.innerHTML = html;
+      this.output.appendChild(line);
+      this.scrollToBottom();
+      return line;
+    }
+
     createLine(text, className) {
       return this.printLine(text, className);
     }
@@ -545,7 +556,7 @@
         const filled = Math.min(Math.round((i / steps) * totalBlocks), totalBlocks);
         const empty = totalBlocks - filled;
         const bar = '█'.repeat(filled) + '░'.repeat(empty);
-        this.updateLine(el, `Coffee Level: ${bar} ${currentPct}%`);
+        this.updateLine(el, `⚠️  Coffee Level: ${bar} ${currentPct}% (I don't drink coffee)`);
         if (!reduced) await this.sleep(stepDuration);
       }
     }
@@ -624,7 +635,7 @@
         '  cd          Change directory',
         '  pwd         Print working directory',
         '  cat         Display file contents',
-        '  whoami      Print current user',
+        '  whoami      Show user profile',
         '  clear       Clear the terminal',
         ''
       ];
@@ -755,32 +766,31 @@
       this.printLine('└' + '─'.repeat(panelWidth) + '┘', 'profile-box');
       await this.sleep(stepDelay);
 
-      // Identità
-      makeLine('Identità', 'profile-section');
-      makeLine('  Nome:  ' + PROFILE_DATA.identita.nome);
-      makeLine('  Ruolo: ' + PROFILE_DATA.identita.ruolo);
-      makeLine('  ' + PROFILE_DATA.identita.descrizione);
+      // Identity
+      makeLine('Identity', 'profile-section');
+      makeLine('  Name:        ' + PROFILE_DATA.identity.name);
+      makeLine('  Role:        ' + PROFILE_DATA.identity.role);
+      makeLine('  ' + PROFILE_DATA.identity.description);
       await this.sleep(stepDelay);
 
-      // Studi
-      makeLine('Studi', 'profile-section');
-      makeLine('  Università: ' + PROFILE_DATA.studi.universita);
-      makeLine('  Laurea:     ' + PROFILE_DATA.studi.laurea);
-      makeLine('  Materie:    ' + PROFILE_DATA.studi.materie);
-      makeLine('  Competenze: ' + PROFILE_DATA.studi.competenze);
+      // Education
+      makeLine('Education', 'profile-section');
+      makeLine('  University:  ' + PROFILE_DATA.education.university + ' 🎓');
+      makeLine('  Degree:      ' + PROFILE_DATA.education.degree);
+      makeLine('  Skills:      ' + PROFILE_DATA.education.skills);
       await this.sleep(stepDelay);
 
-      // Ambiti di interesse
-      makeLine('Ambiti di interesse', 'profile-section');
-      for (const ambito of PROFILE_DATA.ambiti) {
-        makeLine('  - ' + ambito);
+      // Interests
+      makeLine('Interests', 'profile-section');
+      for (const interest of PROFILE_DATA.interests) {
+        makeLine('  - ' + interest);
         if (!reduced) await this.sleep(150);
       }
       await this.sleep(stepDelay);
 
-      // Competenze Cybersecurity
-      makeLine('Competenze Cybersecurity', 'profile-section');
-      for (const skill of PROFILE_DATA.competenzeCyber) {
+      // Cybersecurity Skills
+      makeLine('Cybersecurity Skills', 'profile-section');
+      for (const skill of PROFILE_DATA.cyberSkills) {
         const skillLabel = this.formatSkillLabel(skill.name, 18);
         const skillLine = this.printLine(`${skillLabel} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
         await this.animateSkillBar(skillLine, skill.name, skill.pct);
@@ -788,37 +798,46 @@
       }
       await this.sleep(stepDelay);
 
-      // Esperienze
-      makeLine('Esperienze', 'profile-section');
-      for (const exp of PROFILE_DATA.esperienze) {
-        makeLine('  ' + exp);
+      // Experience
+      makeLine('Experience', 'profile-section');
+      for (const exp of PROFILE_DATA.experience) {
+        const hasCyberoo = exp.toLowerCase().includes('cyberoo');
+        makeLine('  ' + (hasCyberoo ? '🛡️ ' : '') + exp);
         if (!reduced) await this.sleep(250);
       }
       await this.sleep(stepDelay);
 
-      // Progetti preferiti
-      makeLine('Progetti preferiti', 'profile-section');
+      // Favorite Projects
+      makeLine('Favorite Projects', 'profile-section');
       this.printLine('> ls ~/projects', 'info');
-      for (const proj of PROFILE_DATA.progetti) {
+      for (const proj of PROFILE_DATA.projects) {
         makeLine('  ' + proj + '/', 'info');
         if (!reduced) await this.sleep(200);
       }
       await this.sleep(stepDelay);
 
-      // Filosofia
-      makeLine('Filosofia', 'profile-section');
-      makeLine('  "' + PROFILE_DATA.filosofia + '"');
+      // Philosophy
+      makeLine('Philosophy', 'profile-section');
+      makeLine('  "' + PROFILE_DATA.philosophy + '"');
       await this.sleep(stepDelay);
 
-      // Curiosità
-      makeLine('Curiosità', 'profile-section');
-      for (const cur of PROFILE_DATA.curiosita) {
-        if (cur.label === 'Coffee Level') {
-          const coffeeLine = this.printLine('Coffee Level: ░░░░░░░░░░ 0%', 'profile-skill');
-          await this.animateCoffeeBar(coffeeLine, 100);
+      // Fun Facts
+      makeLine('Fun Facts', 'profile-section');
+      for (const fact of PROFILE_DATA.funFacts) {
+        if (fact.label === 'Coffee Level') {
+          const coffeeLine = this.printLine('⚠️  Coffee Level: ░░░░░░░░░░ 0% (I don\'t drink coffee)', 'coffee-warning');
+          await this.animateCoffeeBar(coffeeLine, 0);
         } else {
-          makeLine('  ' + cur.label + ': ' + cur.value);
+          makeLine('  ' + fact.label + ': ' + fact.value);
         }
+        if (!reduced) await this.sleep(200);
+      }
+      await this.sleep(stepDelay);
+
+      // Links
+      makeLine('Connect', 'profile-section');
+      for (const link of PROFILE_DATA.links) {
+        const linkLine = this.printHtmlLine(`  <a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>`, 'profile-link');
         if (!reduced) await this.sleep(200);
       }
 
