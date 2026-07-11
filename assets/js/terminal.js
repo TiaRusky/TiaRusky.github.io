@@ -805,7 +805,7 @@
 
       // Education
       makeSection('Education');
-      makeHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`, 'profile-line');
+      makeHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`);
       makeLine('  Degree:      ' + PROFILE_DATA.education.degree);
       makeLine('  Skills:      ' + PROFILE_DATA.education.skills);
       await this.sleep(stepDelay);
@@ -833,7 +833,7 @@
       for (const exp of PROFILE_DATA.experience) {
         const hasCyberoo = exp.toLowerCase().includes('cyberoo');
         if (hasCyberoo) {
-          makeHtmlLine(`  <img src="${PROFILE_DATA.logos.cyberoo}" alt="Cyberoo" class="profile-logo"> ${exp}`, 'profile-line');
+          makeHtmlLine(`  <img src="${PROFILE_DATA.logos.cyberoo}" alt="Cyberoo" class="profile-logo"> ${exp}`);
         } else {
           makeLine('  ' + exp);
         }
