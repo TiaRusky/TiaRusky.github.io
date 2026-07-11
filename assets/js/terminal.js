@@ -518,13 +518,15 @@
       const stepDuration = 30;
       const reduced = this.isReducedMotion();
       const targetBlocks = Math.round((pct / 100) * totalBlocks);
+      const labelWidth = 18;
+      const label = name.length > labelWidth ? name.slice(0, labelWidth - 1) + '…' : name.padEnd(labelWidth);
 
       for (let i = 0; i <= steps; i++) {
         const currentPct = Math.min(Math.round((i / steps) * pct), pct);
         const filled = Math.min(Math.round((i / steps) * targetBlocks), targetBlocks);
         const empty = totalBlocks - filled;
         const bar = '█'.repeat(filled) + '░'.repeat(empty);
-        this.updateLine(el, `${name.padEnd(10)} ${bar} ${currentPct}%`);
+        this.updateLine(el, `${label} ${bar} ${currentPct}%`);
         if (!reduced) await this.sleep(stepDuration);
       }
     }
@@ -776,7 +778,8 @@
       // Competenze Cybersecurity
       makeLine('Competenze Cybersecurity', 'profile-section');
       for (const skill of PROFILE_DATA.competenzeCyber) {
-        const skillLine = this.printLine(`${skill.name.padEnd(10)} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
+        const skillLabel = skill.name.length > 18 ? skill.name.slice(0, 17) + '…' : skill.name.padEnd(18);
+        const skillLine = this.printLine(`${skillLabel} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
         await this.animateSkillBar(skillLine, skill.name, skill.pct);
         await this.sleep(reduced ? 0 : 200);
       }
