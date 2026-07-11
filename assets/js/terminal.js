@@ -345,6 +345,19 @@
     resize();
     window.addEventListener('resize', resize, { passive: true });
 
+    const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    motionMediaQuery.addEventListener('change', () => {
+      if (motionMediaQuery.matches) {
+        isActive = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        renderStatic();
+      } else {
+        isActive = true;
+        if (!rafId) render();
+      }
+    });
+
     if (prefersReducedMotion()) {
       renderStatic();
     } else {
