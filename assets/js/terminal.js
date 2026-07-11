@@ -84,13 +84,14 @@
       'Cybersecurity', 'Sistemi Operativi', 'Linux', 'Backend', 'AI',
       'Computer Vision', 'Machine Learning', 'Cloud', 'DevOps'
     ],
-    stack: [
-      { name: 'C++', pct: 85 },
-      { name: 'Python', pct: 92 },
-      { name: 'Java', pct: 70 },
-      { name: 'Linux', pct: 95 },
-      { name: 'Docker', pct: 72 },
-      { name: 'Git', pct: 88 }
+    competenzeCyber: [
+      { name: 'DFIR', pct: 50 },
+      { name: 'Malware Analysis', pct: 75 },
+      { name: 'OSINT', pct: 25 },
+      { name: 'Reverse Engineering', pct: 50 },
+      { name: 'Web App Security', pct: 25 },
+      { name: 'Cryptography', pct: 50 },
+      { name: 'Penetration Testing', pct: 50 }
     ],
     esperienze: [
       '2022-Oggi: Studi in Ingegneria Informatica',
@@ -772,9 +773,9 @@
       }
       await this.sleep(stepDelay);
 
-      // Stack tecnologico
-      makeLine('Stack tecnologico', 'profile-section');
-      for (const skill of PROFILE_DATA.stack) {
+      // Competenze Cybersecurity
+      makeLine('Competenze Cybersecurity', 'profile-section');
+      for (const skill of PROFILE_DATA.competenzeCyber) {
         const skillLine = this.printLine(`${skill.name.padEnd(10)} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
         await this.animateSkillBar(skillLine, skill.name, skill.pct);
         await this.sleep(reduced ? 0 : 200);
