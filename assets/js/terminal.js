@@ -523,7 +523,7 @@
         const filled = Math.min(Math.round((i / steps) * targetBlocks), targetBlocks);
         const empty = totalBlocks - filled;
         const bar = '█'.repeat(filled) + '░'.repeat(empty);
-        this.updateLine(el, `${name.padEnd(10)} [${bar}] ${currentPct}%`);
+        this.updateLine(el, `${name.padEnd(10)} ${bar} ${currentPct}%`);
         if (!reduced) await this.sleep(stepDuration);
       }
     }
@@ -539,7 +539,7 @@
         const filled = Math.min(Math.round((i / steps) * totalBlocks), totalBlocks);
         const empty = totalBlocks - filled;
         const bar = '█'.repeat(filled) + '░'.repeat(empty);
-        this.updateLine(el, `Coffee Level: [${bar}] ${currentPct}%`);
+        this.updateLine(el, `Coffee Level: ${bar} ${currentPct}%`);
         if (!reduced) await this.sleep(stepDuration);
       }
     }
@@ -775,7 +775,7 @@
       // Stack tecnologico
       makeLine('Stack tecnologico', 'profile-section');
       for (const skill of PROFILE_DATA.stack) {
-        const skillLine = this.printLine(`${skill.name.padEnd(10)} [░░░░░░░░░░░░░░░] 0%`, 'profile-skill');
+        const skillLine = this.printLine(`${skill.name.padEnd(10)} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
         await this.animateSkillBar(skillLine, skill.name, skill.pct);
         await this.sleep(reduced ? 0 : 200);
       }
@@ -807,7 +807,7 @@
       makeLine('Curiosità', 'profile-section');
       for (const cur of PROFILE_DATA.curiosita) {
         if (cur.label === 'Coffee Level') {
-          const coffeeLine = this.printLine('Coffee Level: [░░░░░░░░░░] 0%', 'profile-skill');
+          const coffeeLine = this.printLine('Coffee Level: ░░░░░░░░░░ 0%', 'profile-skill');
           await this.animateCoffeeBar(coffeeLine, 100);
         } else {
           makeLine('  ' + cur.label + ': ' + cur.value);
