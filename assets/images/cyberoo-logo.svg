@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <path d="M32 6 L58 16 L58 30 C58 46 32 60 32 60 C32 60 6 46 6 30 L6 16 Z" fill="none" stroke="#00e5ff" stroke-width="2"/>
-  <text x="32" y="38" text-anchor="middle" fill="#00e5ff" font-family="monospace" font-size="24" font-weight="bold">C</text>
-</svg>

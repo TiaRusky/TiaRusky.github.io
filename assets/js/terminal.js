@@ -78,7 +78,7 @@
       university: 'Sapienza Università di Roma',
       degree: 'Computer Science + Cybersecurity (Master degree)',
       skills: 'Digital forensics, Reverse engineering, Network security',
-      logo: 'assets/images/sapienza-logo.svg'
+      logo: 'assets/images/sapienza-university-of-rome-vector-logo-11574040616palzsdxmqd.png'
     },
     interests: [
       'Cybersecurity', 'Operating Systems', 'Linux', 'Backend', 'AI',
@@ -109,8 +109,8 @@
       { name: 'Hack The Box', url: 'https://app.hackthebox.com/public/users/1431018' }
     ],
     logos: {
-      sapienza: 'assets/images/sapienza-logo.svg',
-      cyberoo: 'assets/images/cyberoo-logo.svg'
+      sapienza: 'assets/images/sapienza-university-of-rome-vector-logo-11574040616palzsdxmqd.png',
+      cyberoo: 'assets/images/cyberoo_italia_logo.jpg'
     }
   };
 
@@ -780,6 +780,14 @@
         const text = `─ ${title} ─`;
         this.printLine('╟' + text.padEnd(width, '─') + '╢', 'profile-section');
       };
+      const makeHtmlLine = (html, cls) => {
+        const line = document.createElement('div');
+        line.className = 'line profile-box-line' + (cls ? ' ' + cls : '');
+        line.innerHTML = '<span class="box-border">║</span><span class="box-content">' + html + '</span><span class="box-border">║</span>';
+        this.output.appendChild(line);
+        this.scrollToBottom();
+        return line;
+      };
 
       this.printLine('╔' + '═'.repeat(panelWidth - 2) + '╗', 'profile-box');
       makeLine('', 'profile-box');
@@ -797,7 +805,7 @@
 
       // Education
       makeSection('Education');
-      this.printHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`, 'profile-line');
+      makeHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`, 'profile-line');
       makeLine('  Degree:      ' + PROFILE_DATA.education.degree);
       makeLine('  Skills:      ' + PROFILE_DATA.education.skills);
       await this.sleep(stepDelay);
@@ -825,7 +833,7 @@
       for (const exp of PROFILE_DATA.experience) {
         const hasCyberoo = exp.toLowerCase().includes('cyberoo');
         if (hasCyberoo) {
-          this.printHtmlLine(`  <img src="${PROFILE_DATA.logos.cyberoo}" alt="Cyberoo" class="profile-logo"> ${exp}`, 'profile-line');
+          makeHtmlLine(`  <img src="${PROFILE_DATA.logos.cyberoo}" alt="Cyberoo" class="profile-logo"> ${exp}`, 'profile-line');
         } else {
           makeLine('  ' + exp);
         }
@@ -863,7 +871,7 @@
       // Links
       makeSection('Connect');
       for (const link of PROFILE_DATA.links) {
-        const linkLine = this.printHtmlLine(`  <a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>`, 'profile-link');
+        const linkLine = makeHtmlLine(`  <a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>`, 'profile-link');
         if (!reduced) await this.sleep(200);
       }
 

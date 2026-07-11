@@ -387,6 +387,27 @@ body {
   color: var(--fg-dim);
 }
 
+/* Box-wrapped HTML lines (logos, links) */
+.output .profile-box-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 52ch;
+  max-width: 100%;
+  gap: 0;
+}
+
+.output .profile-box-line .box-border {
+  flex-shrink: 0;
+  color: var(--fg-dim);
+}
+
+.output .profile-box-line .box-content {
+  flex: 1;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
 .output .coffee-warning {
   color: var(--red);
   text-shadow: 0 0 4px rgba(255, 95, 86, 0.35);
