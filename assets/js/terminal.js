@@ -999,7 +999,7 @@
         this.appBoot.classList.add('hidden');
         this.appOverlay.classList.remove('booting');
         this.appFrame.classList.remove('hidden');
-        this.appFrame.src = 'tools/SOCGraph/index.html';
+        this.appFrame.src = 'tools/SOCGraph/index.html?v=12';
       }, bootDuration + 200);
     }
 
