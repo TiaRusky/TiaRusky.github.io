@@ -407,6 +407,21 @@ body {
   color: var(--fg-bright);
 }
 
+.output .profile-logo {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: middle;
+  margin-right: 0.35rem;
+  filter: drop-shadow(0 0 2px rgba(0, 229, 255, 0.5));
+}
+
+.output .profile-line {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 /* Train animation for `sl` easter egg */
 .train-container {
   position: absolute;

@@ -77,7 +77,8 @@
     education: {
       university: 'Sapienza Università di Roma',
       degree: 'Computer Science + Cybersecurity (Master degree)',
-      skills: 'Digital forensics, Reverse engineering, Network security'
+      skills: 'Digital forensics, Reverse engineering, Network security',
+      logo: 'assets/images/sapienza-logo.svg'
     },
     interests: [
       'Cybersecurity', 'Operating Systems', 'Linux', 'Backend', 'AI',
@@ -105,8 +106,12 @@
     links: [
       { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mattia-russo-b7ba89295/' },
       { name: 'GitHub', url: 'https://github.com/TiaRusky' },
-      { name: 'Hack The Box', url: 'https://app.hackthebox.com/profile/your-id' }
-    ]
+      { name: 'Hack The Box', url: 'https://app.hackthebox.com/public/users/1431018' }
+    ],
+    logos: {
+      sapienza: 'assets/images/sapienza-logo.svg',
+      cyberoo: 'assets/images/cyberoo-logo.svg'
+    }
   };
 
   // =========================================================
@@ -754,34 +759,47 @@
       await this.sleep(stepDelay);
 
       // Profile panel
-      const panelWidth = 50;
-      const makeLine = (text, cls) => this.printLine('| ' + text.padEnd(panelWidth - 2) + ' |', cls);
+      const panelWidth = 52;
+      const makeLine = (text, cls) => {
+        const width = panelWidth - 2;
+        for (let i = 0; i < text.length; i += width) {
+          this.printLine('║' + text.slice(i, i + width).padEnd(width) + '║', cls);
+        }
+      };
       const makeHeader = (text) => {
-        const padded = (' ' + text + ' ').padStart((panelWidth + text.length) / 2, ' ').padEnd(panelWidth, ' ');
-        this.printLine('|' + padded + '|', 'profile-header');
+        const width = panelWidth - 2;
+        const padded = text.padStart((width + text.length) / 2, ' ').padEnd(width, ' ');
+        this.printLine('║' + padded + '║', 'profile-header');
+      };
+      const makeSection = (title) => {
+        const width = panelWidth - 2;
+        const text = `─ ${title} ─`;
+        this.printLine('╟' + text.padEnd(width, '─') + '╢', 'profile-section');
       };
 
-      this.printLine('┌' + '─'.repeat(panelWidth) + '┐', 'profile-box');
-      makeHeader('USER PROFILE');
-      this.printLine('└' + '─'.repeat(panelWidth) + '┘', 'profile-box');
+      this.printLine('╔' + '═'.repeat(panelWidth - 2) + '╗', 'profile-box');
+      makeLine('', 'profile-box');
+      makeHeader('★  U S E R   P R O F I L E   ★');
+      makeLine('', 'profile-box');
+      this.printLine('╠' + '═'.repeat(panelWidth - 2) + '╣', 'profile-box');
       await this.sleep(stepDelay);
 
       // Identity
-      makeLine('Identity', 'profile-section');
+      makeSection('Identity');
       makeLine('  Name:        ' + PROFILE_DATA.identity.name);
       makeLine('  Role:        ' + PROFILE_DATA.identity.role);
       makeLine('  ' + PROFILE_DATA.identity.description);
       await this.sleep(stepDelay);
 
       // Education
-      makeLine('Education', 'profile-section');
-      makeLine('  University:  ' + PROFILE_DATA.education.university + ' 🎓');
+      makeSection('Education');
+      this.printHtmlLine(`  <img src="${PROFILE_DATA.education.logo}" alt="Sapienza" class="profile-logo"> ${PROFILE_DATA.education.university}`, 'profile-line');
       makeLine('  Degree:      ' + PROFILE_DATA.education.degree);
       makeLine('  Skills:      ' + PROFILE_DATA.education.skills);
       await this.sleep(stepDelay);
 
       // Interests
-      makeLine('Interests', 'profile-section');
+      makeSection('Interests');
       for (const interest of PROFILE_DATA.interests) {
         makeLine('  - ' + interest);
         if (!reduced) await this.sleep(150);
@@ -789,7 +807,7 @@
       await this.sleep(stepDelay);
 
       // Cybersecurity Skills
-      makeLine('Cybersecurity Skills', 'profile-section');
+      makeSection('Cybersecurity Skills');
       for (const skill of PROFILE_DATA.cyberSkills) {
         const skillLabel = this.formatSkillLabel(skill.name, 18);
         const skillLine = this.printLine(`${skillLabel} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
@@ -799,16 +817,20 @@
       await this.sleep(stepDelay);
 
       // Experience
-      makeLine('Experience', 'profile-section');
+      makeSection('Experience');
       for (const exp of PROFILE_DATA.experience) {
         const hasCyberoo = exp.toLowerCase().includes('cyberoo');
-        makeLine('  ' + (hasCyberoo ? '🛡️ ' : '') + exp);
+        if (hasCyberoo) {
+          this.printHtmlLine(`  <img src="${PROFILE_DATA.logos.cyberoo}" alt="Cyberoo" class="profile-logo"> ${exp}`, 'profile-line');
+        } else {
+          makeLine('  ' + exp);
+        }
         if (!reduced) await this.sleep(250);
       }
       await this.sleep(stepDelay);
 
       // Favorite Projects
-      makeLine('Favorite Projects', 'profile-section');
+      makeSection('Favorite Projects');
       this.printLine('> ls ~/projects', 'info');
       for (const proj of PROFILE_DATA.projects) {
         makeLine('  ' + proj + '/', 'info');
@@ -817,12 +839,12 @@
       await this.sleep(stepDelay);
 
       // Philosophy
-      makeLine('Philosophy', 'profile-section');
+      makeSection('Philosophy');
       makeLine('  "' + PROFILE_DATA.philosophy + '"');
       await this.sleep(stepDelay);
 
       // Fun Facts
-      makeLine('Fun Facts', 'profile-section');
+      makeSection('Fun Facts');
       for (const fact of PROFILE_DATA.funFacts) {
         if (fact.label === 'Coffee Level') {
           const coffeeLine = this.printLine('⚠️  Coffee Level: ░░░░░░░░░░ 0% (I don\'t drink coffee)', 'coffee-warning');
@@ -835,14 +857,15 @@
       await this.sleep(stepDelay);
 
       // Links
-      makeLine('Connect', 'profile-section');
+      makeSection('Connect');
       for (const link of PROFILE_DATA.links) {
         const linkLine = this.printHtmlLine(`  <a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>`, 'profile-link');
         if (!reduced) await this.sleep(200);
       }
 
-      this.printLine('');
-      this.printLine('Profile loaded successfully.', 'success');
+      this.printLine('╠' + '═'.repeat(panelWidth - 2) + '╣', 'profile-box');
+      makeLine('  ✔ Profile loaded successfully', 'success');
+      this.printLine('╚' + '═'.repeat(panelWidth - 2) + '╝', 'profile-box');
     }
 
     cmdClear() {
