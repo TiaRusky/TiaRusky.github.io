@@ -139,9 +139,11 @@
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
+    let shootingStars = [];
     let nebulaOffset = 0;
     let rafId = null;
     let isActive = true;
+    let lastShootingStarTime = 0;
 
     let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -235,12 +237,87 @@
       });
     }
 
+    function createShootingStar() {
+      // Choose a diagonal direction: down-right or down-left
+      const direction = Math.random() < 0.5 ? 1 : -1;
+      const startSide = Math.random() < 0.5 ? 'top' : (direction === 1 ? 'left' : 'right');
+      let x, y;
+      const speed = Math.random() * 6 + 4; // medium speed
+      const baseAngle = direction === 1 ? Math.PI / 4 : (3 * Math.PI) / 4;
+      const angle = baseAngle + (Math.random() * 0.3 - 0.15);
+
+      if (startSide === 'top') {
+        x = Math.random() * width;
+        y = -50;
+      } else if (startSide === 'right') {
+        x = width + 50;
+        y = Math.random() * (height * 0.4);
+      } else {
+        x = -50;
+        y = Math.random() * (height * 0.4);
+      }
+
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed;
+      const length = Math.random() * 80 + 60;
+
+      shootingStars.push({ x, y, vx, vy, length, speed, life: 1 });
+    }
+
+    function drawShootingStars() {
+      shootingStars.forEach((s) => {
+        const tailX = s.x - s.vx * (s.length / s.speed);
+        const tailY = s.y - s.vy * (s.length / s.speed);
+        const fade = Math.max(0, s.life);
+        const gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
+        gradient.addColorStop(0, `rgba(179, 255, 255, ${0.95 * fade})`);
+        gradient.addColorStop(0.4, `rgba(0, 229, 255, ${0.6 * fade})`);
+        gradient.addColorStop(1, 'rgba(0, 229, 255, 0)');
+
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // Small glowing head
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * fade})`;
+        ctx.fill();
+      });
+    }
+
+    function updateShootingStars() {
+      // Spawn a new shooting star every ~2 seconds on average (medium intensity)
+      const now = performance.now();
+      if (now - lastShootingStarTime > 1800 + Math.random() * 1200) {
+        createShootingStar();
+        lastShootingStarTime = now;
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.008;
+        const buffer = s.length + 50;
+        if (s.x > width + buffer || s.x < -buffer || s.y > height + buffer || s.life <= 0) {
+          shootingStars.splice(i, 1);
+        }
+      }
+    }
+
     function render() {
       if (!isActive) return;
       ctx.clearRect(0, 0, width, height);
       drawNebula();
       drawStars();
       updateStars();
+      drawShootingStars();
+      updateShootingStars();
       nebulaOffset++;
       rafId = requestAnimationFrame(render);
     }
@@ -249,6 +326,7 @@
       ctx.clearRect(0, 0, width, height);
       drawNebula();
       drawStars();
+      // Shooting stars are disabled for reduced motion
     }
 
     resize();
@@ -271,6 +349,7 @@
         }
       } else if (!rafId) {
         isActive = true;
+        lastShootingStarTime = performance.now();
         render();
       }
     });
