@@ -762,6 +762,10 @@
       const panelWidth = 52;
       const makeLine = (text, cls) => {
         const width = panelWidth - 2;
+        if (text.length === 0) {
+          this.printLine('║' + ''.padEnd(width) + '║', cls);
+          return;
+        }
         for (let i = 0; i < text.length; i += width) {
           this.printLine('║' + text.slice(i, i + width).padEnd(width) + '║', cls);
         }
