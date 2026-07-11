@@ -978,6 +978,7 @@
       this.appOverlay.setAttribute('aria-hidden', 'false');
       this.appFrame.classList.add('hidden');
       this.appBoot.classList.remove('hidden');
+      this.hiddenInput.disabled = true;
       this.hiddenInput.blur();
 
       const reduced = this.isReducedMotion();
@@ -1043,6 +1044,7 @@
       this.appOverlay.classList.add('hidden');
       this.appOverlay.setAttribute('aria-hidden', 'true');
       this.appBoot.classList.add('hidden');
+      this.hiddenInput.disabled = false;
       this.focusInput();
     }
 
