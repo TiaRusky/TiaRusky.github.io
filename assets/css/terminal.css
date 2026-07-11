@@ -456,15 +456,6 @@ body {
   transform: translateX(4px);
 }
 
-.output .profile-link a {
-  color: var(--accent);
-  text-decoration: underline;
-}
-
-.output .profile-link a:hover {
-  color: var(--fg-bright);
-}
-
 .output .profile-logo {
   display: inline-block;
   width: 1.2em;

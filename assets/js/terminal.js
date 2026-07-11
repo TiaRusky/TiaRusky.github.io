@@ -880,7 +880,7 @@
       makeSection('Connect');
       for (const link of PROFILE_DATA.links) {
         const linkHtml = `  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="profile-connect-link" title="Open ${link.name}"><span class="connect-icon">${link.icon}</span><span class="connect-name">${link.name}</span><span class="connect-arrow">→</span></a>`;
-        const linkLine = makeHtmlLine(linkHtml, 'profile-link');
+        const linkLine = makeHtmlLine(linkHtml);
         if (!reduced) await this.sleep(200);
       }
 
