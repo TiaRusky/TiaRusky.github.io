@@ -125,6 +125,18 @@
   };
 
   // =========================================================
+  // Reduced motion preference (cached)
+  // =========================================================
+  let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+    reducedMotion = e.matches;
+  });
+
+  function prefersReducedMotion() {
+    return reducedMotion;
+  }
+
+  // =========================================================
   // Boot / Loading Sequence
   // =========================================================
   function runBootSequence(onComplete) {
@@ -135,7 +147,7 @@
     const texts = ['Loading cisanini...', 'Loading knowledge...', 'Almost there...', 'Ready!'];
     const duration = 3000;
     const fadeDuration = 500;
-    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = prefersReducedMotion();
 
     let textIdx = 0;
     let textInterval = null;
@@ -146,7 +158,7 @@
       bootBar.textContent = `[${hashes}${spaces}] ${Math.floor(percent)}%`;
     }
 
-    if (isReducedMotion) {
+    if (reduced) {
       bootText.textContent = texts[texts.length - 1];
       bootBar.textContent = '[####################] 100%';
     } else {
@@ -184,36 +196,20 @@
   }
 
   // =========================================================
-  // Starfield / Nebula Background
+  // Starfield / Nebula Background (optimized)
   // =========================================================
   function initSpaceBackground() {
     const canvas = document.getElementById('space-bg');
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
     let width, height;
     let stars = [];
     let shootingStars = [];
-    let nebulaOffset = 0;
     let rafId = null;
     let isActive = true;
     let lastShootingStarTime = 0;
-
-    let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    motionMediaQuery.addEventListener('change', (e) => {
-      prefersReducedMotion = e.matches;
-      if (prefersReducedMotion) {
-        isActive = false;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = null;
-        renderStatic();
-      } else {
-        isActive = true;
-        if (!rafId) render();
-      }
-    });
+    let frameCount = 0;
 
     function resize() {
       width = window.innerWidth;
@@ -225,78 +221,47 @@
 
     function createStars() {
       stars = [];
-      const count = Math.min(Math.floor((width * height) / 6000), 220);
+      // Lower density for better performance while keeping the visual effect
+      const count = Math.min(Math.floor((width * height) / 9000), 140);
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          radius: Math.random() * 1.4 + 0.3,
-          alpha: Math.random() * 0.6 + 0.2,
-          speed: Math.random() * 0.15 + 0.03,
+          size: Math.random() * 1.2 + 0.4,
+          alpha: Math.random() * 0.5 + 0.2,
+          speed: Math.random() * 0.12 + 0.03,
           twinkleSpeed: Math.random() * 0.02 + 0.005,
           twinklePhase: Math.random() * Math.PI * 2
         });
       }
     }
 
-    function drawNebula() {
-      // Soft animated nebula blobs
-      const gradient = ctx.createRadialGradient(
-        width * 0.25 + Math.sin(nebulaOffset * 0.0003) * 60,
-        height * 0.35 + Math.cos(nebulaOffset * 0.0004) * 40,
-        0,
-        width * 0.25,
-        height * 0.35,
-        width * 0.7
-      );
-      gradient.addColorStop(0, 'rgba(0, 85, 255, 0.14)');
-      gradient.addColorStop(0.5, 'rgba(0, 40, 120, 0.08)');
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-
-      const gradient2 = ctx.createRadialGradient(
-        width * 0.75 + Math.cos(nebulaOffset * 0.00035) * 50,
-        height * 0.65 + Math.sin(nebulaOffset * 0.00045) * 50,
-        0,
-        width * 0.75,
-        height * 0.65,
-        width * 0.6
-      );
-      gradient2.addColorStop(0, 'rgba(0, 229, 255, 0.10)');
-      gradient2.addColorStop(0.6, 'rgba(0, 60, 120, 0.05)');
-      gradient2.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient2;
-      ctx.fillRect(0, 0, width, height);
-    }
-
     function drawStars() {
-      stars.forEach((star) => {
-        const twinkle = Math.sin(nebulaOffset * star.twinkleSpeed + star.twinklePhase);
-        const alpha = star.alpha + twinkle * 0.15;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(179, 255, 255, ${Math.max(0.05, alpha)})`;
-        ctx.fill();
-      });
+      ctx.fillStyle = '#b3ffff';
+      for (const star of stars) {
+        const twinkle = Math.sin(frameCount * star.twinkleSpeed + star.twinklePhase);
+        const alpha = Math.max(0.05, star.alpha + twinkle * 0.12);
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(star.x, star.y, star.size, star.size);
+      }
+      ctx.globalAlpha = 1;
     }
 
     function updateStars() {
-      stars.forEach((star) => {
+      for (const star of stars) {
         star.y -= star.speed;
         if (star.y < 0) {
           star.y = height;
           star.x = Math.random() * width;
         }
-      });
+      }
     }
 
     function createShootingStar() {
-      // Choose a diagonal direction: down-right or down-left
       const direction = Math.random() < 0.5 ? 1 : -1;
       const startSide = Math.random() < 0.5 ? 'top' : (direction === 1 ? 'left' : 'right');
       let x, y;
-      const speed = Math.random() * 6 + 4; // medium speed
+      const speed = Math.random() * 6 + 4;
       const baseAngle = direction === 1 ? Math.PI / 4 : (3 * Math.PI) / 4;
       const angle = baseAngle + (Math.random() * 0.3 - 0.15);
 
@@ -319,33 +284,30 @@
     }
 
     function drawShootingStars() {
-      shootingStars.forEach((s) => {
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = 'rgba(0, 229, 255, 0.6)';
+
+      for (const s of shootingStars) {
         const tailX = s.x - s.vx * (s.length / s.speed);
         const tailY = s.y - s.vy * (s.length / s.speed);
         const fade = Math.max(0, s.life);
-        const gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-        gradient.addColorStop(0, `rgba(179, 255, 255, ${0.95 * fade})`);
-        gradient.addColorStop(0.4, `rgba(0, 229, 255, ${0.6 * fade})`);
-        gradient.addColorStop(1, 'rgba(0, 229, 255, 0)');
 
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
         ctx.lineTo(tailX, tailY);
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.5;
-        ctx.lineCap = 'round';
+        ctx.strokeStyle = `rgba(179, 255, 255, ${0.9 * fade})`;
         ctx.stroke();
 
-        // Small glowing head
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, 1.6, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * fade})`;
-        ctx.fill();
-      });
+        ctx.fillRect(s.x - 1, s.y - 1, 2, 2);
+      }
+
+      ctx.shadowBlur = 0;
     }
 
     function updateShootingStars() {
-      // Spawn a new shooting star every ~2 seconds on average (medium intensity)
       const now = performance.now();
       if (now - lastShootingStarTime > 1800 + Math.random() * 1200) {
         createShootingStar();
@@ -367,26 +329,23 @@
     function render() {
       if (!isActive) return;
       ctx.clearRect(0, 0, width, height);
-      drawNebula();
       drawStars();
       updateStars();
       drawShootingStars();
       updateShootingStars();
-      nebulaOffset++;
+      frameCount++;
       rafId = requestAnimationFrame(render);
     }
 
     function renderStatic() {
       ctx.clearRect(0, 0, width, height);
-      drawNebula();
       drawStars();
-      // Shooting stars are disabled for reduced motion
     }
 
     resize();
     window.addEventListener('resize', resize, { passive: true });
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion()) {
       renderStatic();
     } else {
       render();
@@ -394,7 +353,7 @@
 
     // Pause when tab is hidden to save battery
     document.addEventListener('visibilitychange', () => {
-      if (prefersReducedMotion) return;
+      if (prefersReducedMotion()) return;
       if (document.hidden) {
         isActive = false;
         if (rafId) {
@@ -435,6 +394,7 @@
       this.historyIndex = -1;
       this.isRoot = false;
       this.isAnimating = false;
+      this.scrollScheduled = false;
 
       this.init();
     }
@@ -465,15 +425,19 @@
 
     updateTypedText() {
       this.typedText.textContent = this.hiddenInput.value;
-      this.scrollToBottom();
     }
 
-    scrollToBottom() {
-      const threshold = 50;
-      const isAtBottom = this.terminal.scrollTop + this.terminal.clientHeight >= this.terminal.scrollHeight - threshold;
-      if (isAtBottom) {
-        this.terminal.scrollTop = this.terminal.scrollHeight;
-      }
+    scheduleScrollToBottom() {
+      if (this.scrollScheduled) return;
+      this.scrollScheduled = true;
+      requestAnimationFrame(() => {
+        this.scrollScheduled = false;
+        const threshold = 50;
+        const isAtBottom = this.terminal.scrollTop + this.terminal.clientHeight >= this.terminal.scrollHeight - threshold;
+        if (isAtBottom) {
+          this.terminal.scrollTop = this.terminal.scrollHeight;
+        }
+      });
     }
 
     getPrompt() {
@@ -504,7 +468,7 @@
       line.className = 'line' + (className ? ' ' + className : '');
       line.textContent = text;
       this.output.appendChild(line);
-      this.scrollToBottom();
+      this.scheduleScrollToBottom();
       return line;
     }
 
@@ -513,7 +477,7 @@
       line.className = 'line' + (className ? ' ' + className : '');
       line.innerHTML = html;
       this.output.appendChild(line);
-      this.scrollToBottom();
+      this.scheduleScrollToBottom();
       return line;
     }
 
@@ -523,7 +487,7 @@
 
     updateLine(el, text) {
       if (el) el.textContent = text;
-      this.scrollToBottom();
+      this.scheduleScrollToBottom();
     }
 
     sleep(ms) {
@@ -531,7 +495,7 @@
     }
 
     isReducedMotion() {
-      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      return prefersReducedMotion();
     }
 
     async animateProgressBar(el, durationMs, finalText) {
@@ -837,7 +801,7 @@
         line.style.width = panelWidth + 'ch';
         line.innerHTML = '<span class="box-border">║</span><span class="box-content">' + html + '</span><span class="box-border">║</span>';
         this.output.appendChild(line);
-        this.scrollToBottom();
+        this.scheduleScrollToBottom();
         return line;
       };
 
