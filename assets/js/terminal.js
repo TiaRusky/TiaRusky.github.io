@@ -447,7 +447,11 @@
     }
 
     scrollToBottom() {
-      this.terminal.scrollTop = this.terminal.scrollHeight;
+      const threshold = 50;
+      const isAtBottom = this.terminal.scrollTop + this.terminal.clientHeight >= this.terminal.scrollHeight - threshold;
+      if (isAtBottom) {
+        this.terminal.scrollTop = this.terminal.scrollHeight;
+      }
     }
 
     getPrompt() {
