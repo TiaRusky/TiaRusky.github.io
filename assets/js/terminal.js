@@ -71,6 +71,65 @@
   };
 
   // =========================================================
+  // Boot / Loading Sequence
+  // =========================================================
+  function runBootSequence(onComplete) {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    const bootBar = document.getElementById('boot-bar');
+
+    const texts = ['Loading cisanini...', 'Loading knowledge...', 'Almost there...', 'Ready!'];
+    const duration = 3000;
+    const fadeDuration = 500;
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let textIdx = 0;
+    let textInterval = null;
+
+    function updateBar(percent) {
+      const hashes = '#'.repeat(Math.floor(percent / 5));
+      const spaces = ' '.repeat(20 - Math.floor(percent / 5));
+      bootBar.textContent = `[${hashes}${spaces}] ${Math.floor(percent)}%`;
+    }
+
+    if (isReducedMotion) {
+      bootText.textContent = texts[texts.length - 1];
+      bootBar.textContent = '[####################] 100%';
+    } else {
+      bootText.textContent = texts[0];
+      bootBar.textContent = '[                    ] 0%';
+
+      textInterval = setInterval(() => {
+        textIdx++;
+        if (textIdx < texts.length) {
+          bootText.textContent = texts[textIdx];
+        }
+      }, duration / texts.length);
+
+      let progress = 0;
+      const barInterval = setInterval(() => {
+        progress += Math.random() * 5 + 2;
+        if (progress > 100) progress = 100;
+        updateBar(progress);
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(barInterval);
+        updateBar(100);
+      }, duration - 100);
+    }
+
+    setTimeout(() => {
+      if (textInterval) clearInterval(textInterval);
+      bootScreen.classList.add('hidden');
+      setTimeout(() => {
+        bootScreen.classList.add('removed');
+        onComplete();
+      }, fadeDuration);
+    }, duration);
+  }
+
+  // =========================================================
   // Starfield / Nebula Background
   // =========================================================
   function initSpaceBackground() {
@@ -519,8 +578,10 @@
   }
 
   function initApp() {
-    window.term = new Terminal();
     initSpaceBackground();
+    runBootSequence(() => {
+      window.term = new Terminal();
+    });
   }
 
   if (document.readyState === 'loading') {

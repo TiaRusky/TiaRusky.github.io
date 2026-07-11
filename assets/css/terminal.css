@@ -73,6 +73,58 @@ body {
 }
 
 /* ============================================================
+   Boot / loading screen
+   ============================================================ */
+.boot-screen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 20, 60, 0.95) 0%, var(--bg-deep) 100%);
+  transition: opacity 0.5s ease;
+}
+
+.boot-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot-screen.removed {
+  display: none;
+}
+
+.boot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.boot-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  min-height: 1.6em;
+}
+
+.boot-bar {
+  font-family: var(--font);
+  font-size: 1rem;
+  color: var(--prompt-green);
+  white-space: pre;
+  text-shadow: 0 0 4px rgba(0, 255, 157, 0.35);
+}
+
+/* ============================================================
    Background canvas
    ============================================================ */
 #space-bg {
