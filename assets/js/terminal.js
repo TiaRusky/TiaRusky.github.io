@@ -9,6 +9,17 @@
   // =========================================================
   // Virtual File System
   // =========================================================
+  const TOOLS_DIR = {
+    type: 'dir',
+    name: 'tools',
+    children: {
+      'SOCGraph': {
+        type: 'file',
+        content: 'SOCGraph forensic investigation tool launcher'
+      }
+    }
+  };
+
   const VFS = {
     type: 'dir',
     name: '/',
@@ -47,7 +58,8 @@
                     content: '# Memory Dump Analysis\n\nAnalyzing volatile memory with Volatility.'
                   }
                 }
-              }
+              },
+              tools: TOOLS_DIR
             }
           }
         }
@@ -62,16 +74,7 @@
           }
         }
       },
-      tools: {
-        type: 'dir',
-        name: 'tools',
-        children: {
-          'SOCGraph': {
-            type: 'file',
-            content: 'SOCGraph forensic investigation tool launcher'
-          }
-        }
-      }
+      tools: TOOLS_DIR
     }
   };
 
