@@ -3,23 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#002b36">
+  <meta name="theme-color" content="#000510">
   <title>TiaRuskii | Linux Terminal Portfolio</title>
   <link rel="stylesheet" href="assets/css/terminal.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐧%3C/text%3E%3C/svg%3E">
 </head>
 <body>
-  <main id="terminal" role="log" aria-live="polite" aria-label="Terminale Linux interattivo">
-    <div id="output" class="output"></div>
-    <div id="input-line" class="input-line">
-      <span class="prompt" id="prompt" aria-hidden="true">user@tiaruskii:~$</span>
-      <span id="typed-text" class="typed-text"></span><span class="cursor" aria-hidden="true">_</span>
-    </div>
-    <label for="hidden-input" class="sr-only">Input terminale</label>
-    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
-  </main>
+  <canvas id="space-bg" aria-hidden="true"></canvas>
 
-  <div id="train-container" class="train-container" aria-hidden="true"></div>
+  <div class="window-wrapper">
+    <div class="window-header" aria-hidden="true">
+      <div class="window-controls">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <span class="window-title">user@tiaruskii:~</span>
+    </div>
+
+    <main id="terminal" role="log" aria-live="polite" aria-label="Terminale Linux interattivo">
+      <div id="output" class="output"></div>
+      <div id="input-line" class="input-line">
+        <span class="prompt" id="prompt" aria-hidden="true">user@tiaruskii:~$</span>
+        <span id="typed-text" class="typed-text"></span><span class="cursor" aria-hidden="true">_</span>
+      </div>
+      <label for="hidden-input" class="sr-only">Input terminale</label>
+      <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+
+      <div id="train-container" class="train-container" aria-hidden="true"></div>
+    </main>
+  </div>
 
   <script src="assets/js/terminal.js"></script>
 </body>

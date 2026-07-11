@@ -1,6 +1,6 @@
 /**
  * terminal.js - Interactive Linux Shell for TiaRuskii Portfolio
- * Theme: Debian + Solarized Dark
+ * Theme: Retro CRT, electric blue/azure, centered glass window
  */
 
 (function () {
@@ -69,6 +69,153 @@
       }
     }
   };
+
+  // =========================================================
+  // Starfield / Nebula Background
+  // =========================================================
+  function initSpaceBackground() {
+    const canvas = document.getElementById('space-bg');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let stars = [];
+    let nebulaOffset = 0;
+    let rafId = null;
+    let isActive = true;
+
+    let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    motionMediaQuery.addEventListener('change', (e) => {
+      prefersReducedMotion = e.matches;
+      if (prefersReducedMotion) {
+        isActive = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        renderStatic();
+      } else {
+        isActive = true;
+        if (!rafId) render();
+      }
+    });
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      createStars();
+    }
+
+    function createStars() {
+      stars = [];
+      const count = Math.min(Math.floor((width * height) / 6000), 220);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.4 + 0.3,
+          alpha: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.15 + 0.03,
+          twinkleSpeed: Math.random() * 0.02 + 0.005,
+          twinklePhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function drawNebula() {
+      // Soft animated nebula blobs
+      const gradient = ctx.createRadialGradient(
+        width * 0.25 + Math.sin(nebulaOffset * 0.0003) * 60,
+        height * 0.35 + Math.cos(nebulaOffset * 0.0004) * 40,
+        0,
+        width * 0.25,
+        height * 0.35,
+        width * 0.7
+      );
+      gradient.addColorStop(0, 'rgba(0, 85, 255, 0.14)');
+      gradient.addColorStop(0.5, 'rgba(0, 40, 120, 0.08)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      const gradient2 = ctx.createRadialGradient(
+        width * 0.75 + Math.cos(nebulaOffset * 0.00035) * 50,
+        height * 0.65 + Math.sin(nebulaOffset * 0.00045) * 50,
+        0,
+        width * 0.75,
+        height * 0.65,
+        width * 0.6
+      );
+      gradient2.addColorStop(0, 'rgba(0, 229, 255, 0.10)');
+      gradient2.addColorStop(0.6, 'rgba(0, 60, 120, 0.05)');
+      gradient2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient2;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    function drawStars() {
+      stars.forEach((star) => {
+        const twinkle = Math.sin(nebulaOffset * star.twinkleSpeed + star.twinklePhase);
+        const alpha = star.alpha + twinkle * 0.15;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(179, 255, 255, ${Math.max(0.05, alpha)})`;
+        ctx.fill();
+      });
+    }
+
+    function updateStars() {
+      stars.forEach((star) => {
+        star.y -= star.speed;
+        if (star.y < 0) {
+          star.y = height;
+          star.x = Math.random() * width;
+        }
+      });
+    }
+
+    function render() {
+      if (!isActive) return;
+      ctx.clearRect(0, 0, width, height);
+      drawNebula();
+      drawStars();
+      updateStars();
+      nebulaOffset++;
+      rafId = requestAnimationFrame(render);
+    }
+
+    function renderStatic() {
+      ctx.clearRect(0, 0, width, height);
+      drawNebula();
+      drawStars();
+    }
+
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    if (prefersReducedMotion) {
+      renderStatic();
+    } else {
+      render();
+    }
+
+    // Pause when tab is hidden to save battery
+    document.addEventListener('visibilitychange', () => {
+      if (prefersReducedMotion) return;
+      if (document.hidden) {
+        isActive = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      } else if (!rafId) {
+        isActive = true;
+        render();
+      }
+    });
+  }
 
   // =========================================================
   // Terminal Class
@@ -370,5 +517,6 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     window.term = new Terminal();
+    initSpaceBackground();
   });
 })();
