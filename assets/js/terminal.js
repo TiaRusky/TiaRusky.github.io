@@ -512,14 +512,17 @@
       if (finalText) this.updateLine(el, finalText);
     }
 
+    formatSkillLabel(name, width) {
+      return name.length > width ? name.slice(0, width - 3) + '...' : name.padEnd(width);
+    }
+
     async animateSkillBar(el, name, pct) {
       const totalBlocks = 15;
       const steps = 15;
       const stepDuration = 30;
       const reduced = this.isReducedMotion();
       const targetBlocks = Math.round((pct / 100) * totalBlocks);
-      const labelWidth = 18;
-      const label = name.length > labelWidth ? name.slice(0, labelWidth - 1) + '…' : name.padEnd(labelWidth);
+      const label = this.formatSkillLabel(name, 18);
 
       for (let i = 0; i <= steps; i++) {
         const currentPct = Math.min(Math.round((i / steps) * pct), pct);
@@ -778,7 +781,7 @@
       // Competenze Cybersecurity
       makeLine('Competenze Cybersecurity', 'profile-section');
       for (const skill of PROFILE_DATA.competenzeCyber) {
-        const skillLabel = skill.name.length > 18 ? skill.name.slice(0, 17) + '…' : skill.name.padEnd(18);
+        const skillLabel = this.formatSkillLabel(skill.name, 18);
         const skillLine = this.printLine(`${skillLabel} ░░░░░░░░░░░░░░░ 0%`, 'profile-skill');
         await this.animateSkillBar(skillLine, skill.name, skill.pct);
         await this.sleep(reduced ? 0 : 200);
