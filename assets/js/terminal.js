@@ -16,15 +16,10 @@
       home: {
         type: 'dir',
         name: 'home',
-        children: {
-          tiarusky: {
+        children: {            tiarusky: {
             type: 'dir',
             name: 'tiarusky',
             children: {
-              'about.txt': {
-                type: 'file',
-                content: 'TiaRuskii - Cybersecurity learner\nPassionate about DFIR, penetration testing and threat intelligence.\nCurrently studying and solving Hack The Box Sherlocks.'
-              },
               writeups: {
                 type: 'dir',
                 name: 'writeups',
@@ -68,6 +63,47 @@
         }
       }
     }
+  };
+
+  // =========================================================
+  // Profile Data (for interactive whoami)
+  // =========================================================
+  const PROFILE_DATA = {
+    identita: {
+      nome: 'TiaRuskii',
+      ruolo: 'Cybersecurity Learner',
+      descrizione: 'Appassionato di DFIR, penetration testing e threat intelligence.'
+    },
+    studi: {
+      universita: 'Politecnico di Torino',
+      laurea: 'Ingegneria Informatica',
+      materie: 'Sicurezza Informatica, Reti, Sistemi Operativi',
+      competenze: 'Analisi forense, Reverse engineering, Network security'
+    },
+    ambiti: [
+      'Cybersecurity', 'Sistemi Operativi', 'Linux', 'Backend', 'AI',
+      'Computer Vision', 'Machine Learning', 'Cloud', 'DevOps'
+    ],
+    stack: [
+      { name: 'C++', pct: 85 },
+      { name: 'Python', pct: 92 },
+      { name: 'Java', pct: 70 },
+      { name: 'Linux', pct: 95 },
+      { name: 'Docker', pct: 72 },
+      { name: 'Git', pct: 88 }
+    ],
+    esperienze: [
+      '2022-Oggi: Studi in Ingegneria Informatica',
+      '2023: Risoluzione di casi DFIR su Hack The Box',
+      '2024: Sviluppo di tool di network monitoring',
+      '2025: Partecipazione a CTF e challenge di sicurezza'
+    ],
+    progetti: ['portfolio', 'vision-ai', 'network-monitor', 'dfir-toolkit'],
+    filosofia: 'I like building things that solve real problems.',
+    curiosita: [
+      { label: 'Favorite OS', value: 'Ubuntu' },
+      { label: 'Coffee Level', value: '100%' }
+    ]
   };
 
   // =========================================================
@@ -374,6 +410,7 @@
       this.history = [];
       this.historyIndex = -1;
       this.isRoot = false;
+      this.isAnimating = false;
 
       this.init();
     }
@@ -387,6 +424,7 @@
 
     bindEvents() {
       document.addEventListener('click', (e) => {
+        if (this.isAnimating) return;
         if (e.target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]')) return;
         this.focusInput();
       });
@@ -436,9 +474,87 @@
       line.textContent = text;
       this.output.appendChild(line);
       this.scrollToBottom();
+      return line;
+    }
+
+    createLine(text, className) {
+      return this.printLine(text, className);
+    }
+
+    updateLine(el, text) {
+      if (el) el.textContent = text;
+      this.scrollToBottom();
+    }
+
+    sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    isReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    async animateProgressBar(el, durationMs, finalText) {
+      const totalBlocks = 20;
+      const steps = 20;
+      const stepDuration = durationMs / steps;
+      const reduced = this.isReducedMotion();
+
+      for (let i = 0; i <= steps; i++) {
+        const percent = Math.floor((i / steps) * 100);
+        const filled = Math.floor((i / steps) * totalBlocks);
+        const empty = totalBlocks - filled;
+        const bar = '█'.repeat(filled) + '░'.repeat(empty);
+        this.updateLine(el, `Scanning profile...\n[${bar}] ${percent}%`);
+        if (!reduced) await this.sleep(stepDuration);
+      }
+      if (finalText) this.updateLine(el, finalText);
+    }
+
+    async animateSkillBar(el, name, pct) {
+      const totalBlocks = 15;
+      const steps = 15;
+      const stepDuration = 30;
+      const reduced = this.isReducedMotion();
+      const targetBlocks = Math.round((pct / 100) * totalBlocks);
+
+      for (let i = 0; i <= steps; i++) {
+        const currentPct = Math.min(Math.round((i / steps) * pct), pct);
+        const filled = Math.min(Math.round((i / steps) * targetBlocks), targetBlocks);
+        const empty = totalBlocks - filled;
+        const bar = '█'.repeat(filled) + '░'.repeat(empty);
+        this.updateLine(el, `${name.padEnd(10)} [${bar}] ${currentPct}%`);
+        if (!reduced) await this.sleep(stepDuration);
+      }
+    }
+
+    async animateCoffeeBar(el, pct) {
+      const totalBlocks = 10;
+      const steps = 10;
+      const stepDuration = 40;
+      const reduced = this.isReducedMotion();
+
+      for (let i = 0; i <= steps; i++) {
+        const currentPct = Math.min(Math.round((i / steps) * pct), pct);
+        const filled = Math.min(Math.round((i / steps) * totalBlocks), totalBlocks);
+        const empty = totalBlocks - filled;
+        const bar = '█'.repeat(filled) + '░'.repeat(empty);
+        this.updateLine(el, `Coffee Level: [${bar}] ${currentPct}%`);
+        if (!reduced) await this.sleep(stepDuration);
+      }
+    }
+
+    async printAnimatedLine(text, delayMs) {
+      const line = this.printLine(text);
+      if (!this.isReducedMotion()) await this.sleep(delayMs);
+      return line;
     }
 
     handleKey(e) {
+      if (this.isAnimating) {
+        e.preventDefault();
+        return;
+      }
       if (e.key === 'Enter') {
         const value = this.hiddenInput.value.trim();
         if (value) {
@@ -473,7 +589,7 @@
       }
     }
 
-    execute(input) {
+    async execute(input) {
       if (!input) return;
       const args = input.split(/\s+/);
       const command = args.shift().toLowerCase();
@@ -484,7 +600,7 @@
         case 'cd': this.cmdCd(args); break;
         case 'pwd': this.cmdPwd(); break;
         case 'cat': this.cmdCat(args); break;
-        case 'whoami': this.cmdWhoami(); break;
+        case 'whoami': await this.cmdWhoami(); break;
         case 'clear': this.cmdClear(); break;
         case 'sudo': this.cmdSudo(args); break;
         case 'rm': this.cmdRm(args); break;
@@ -591,8 +707,116 @@
       this.printLine(node.content);
     }
 
-    cmdWhoami() {
-      this.printLine(this.isRoot ? 'root' : this.username);
+    async cmdWhoami() {
+      this.isAnimating = true;
+      this.hiddenInput.disabled = true;
+
+      try {
+        await this.runWhoamiAnimation();
+      } catch (err) {
+        this.printLine('Error loading profile: ' + err.message, 'error');
+      } finally {
+        this.isAnimating = false;
+        this.hiddenInput.disabled = false;
+        this.focusInput();
+      }
+    }
+
+    async runWhoamiAnimation() {
+      const reduced = this.isReducedMotion();
+      const stepDelay = reduced ? 0 : 600;
+
+      // Scanning phase
+      const scanLine = this.printLine('Scanning profile...\n[░░░░░░░░░░░░░░░░░░░░] 0%');
+      await this.animateProgressBar(scanLine, reduced ? 0 : 1200, 'Scanning profile...\n[████████████████████] 100%');
+      await this.sleep(stepDelay);
+
+      this.printLine('Loading personal information...');
+      await this.sleep(stepDelay);
+      this.printLine('Done.', 'success');
+      await this.sleep(stepDelay);
+
+      // Profile panel
+      const panelWidth = 50;
+      const makeLine = (text, cls) => this.printLine('| ' + text.padEnd(panelWidth - 2) + ' |', cls);
+      const makeHeader = (text) => {
+        const padded = (' ' + text + ' ').padStart((panelWidth + text.length) / 2, ' ').padEnd(panelWidth, ' ');
+        this.printLine('|' + padded + '|', 'profile-header');
+      };
+
+      this.printLine('┌' + '─'.repeat(panelWidth) + '┐', 'profile-box');
+      makeHeader('USER PROFILE');
+      this.printLine('└' + '─'.repeat(panelWidth) + '┘', 'profile-box');
+      await this.sleep(stepDelay);
+
+      // Identità
+      makeLine('Identità', 'profile-section');
+      makeLine('  Nome:  ' + PROFILE_DATA.identita.nome);
+      makeLine('  Ruolo: ' + PROFILE_DATA.identita.ruolo);
+      makeLine('  ' + PROFILE_DATA.identita.descrizione);
+      await this.sleep(stepDelay);
+
+      // Studi
+      makeLine('Studi', 'profile-section');
+      makeLine('  Università: ' + PROFILE_DATA.studi.universita);
+      makeLine('  Laurea:     ' + PROFILE_DATA.studi.laurea);
+      makeLine('  Materie:    ' + PROFILE_DATA.studi.materie);
+      makeLine('  Competenze: ' + PROFILE_DATA.studi.competenze);
+      await this.sleep(stepDelay);
+
+      // Ambiti di interesse
+      makeLine('Ambiti di interesse', 'profile-section');
+      for (const ambito of PROFILE_DATA.ambiti) {
+        makeLine('  - ' + ambito);
+        if (!reduced) await this.sleep(150);
+      }
+      await this.sleep(stepDelay);
+
+      // Stack tecnologico
+      makeLine('Stack tecnologico', 'profile-section');
+      for (const skill of PROFILE_DATA.stack) {
+        const skillLine = this.printLine(`${skill.name.padEnd(10)} [░░░░░░░░░░░░░░░] 0%`, 'profile-skill');
+        await this.animateSkillBar(skillLine, skill.name, skill.pct);
+        await this.sleep(reduced ? 0 : 200);
+      }
+      await this.sleep(stepDelay);
+
+      // Esperienze
+      makeLine('Esperienze', 'profile-section');
+      for (const exp of PROFILE_DATA.esperienze) {
+        makeLine('  ' + exp);
+        if (!reduced) await this.sleep(250);
+      }
+      await this.sleep(stepDelay);
+
+      // Progetti preferiti
+      makeLine('Progetti preferiti', 'profile-section');
+      this.printLine('> ls ~/projects', 'info');
+      for (const proj of PROFILE_DATA.progetti) {
+        makeLine('  ' + proj + '/', 'info');
+        if (!reduced) await this.sleep(200);
+      }
+      await this.sleep(stepDelay);
+
+      // Filosofia
+      makeLine('Filosofia', 'profile-section');
+      makeLine('  "' + PROFILE_DATA.filosofia + '"');
+      await this.sleep(stepDelay);
+
+      // Curiosità
+      makeLine('Curiosità', 'profile-section');
+      for (const cur of PROFILE_DATA.curiosita) {
+        if (cur.label === 'Coffee Level') {
+          const coffeeLine = this.printLine('Coffee Level: [░░░░░░░░░░] 0%', 'profile-skill');
+          await this.animateCoffeeBar(coffeeLine, 100);
+        } else {
+          makeLine('  ' + cur.label + ': ' + cur.value);
+        }
+        if (!reduced) await this.sleep(200);
+      }
+
+      this.printLine('');
+      this.printLine('Profile loaded successfully.', 'success');
     }
 
     cmdClear() {

@@ -247,7 +247,7 @@ body {
   justify-content: flex-end;
   padding: 1rem 1.25rem;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   text-shadow: 0 0 3px rgba(0, 229, 255, 0.35);
 }
 
@@ -366,6 +366,26 @@ body {
 .output .info { color: var(--accent); text-shadow: 0 0 4px rgba(0, 168, 255, 0.35); }
 .output .accent { color: var(--fg-bright); }
 .output .dim { color: var(--fg-dim); }
+
+/* Profile panel styling */
+.output .profile-header {
+  color: var(--fg-bright);
+  font-weight: bold;
+  text-shadow: var(--glow);
+}
+
+.output .profile-section {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.output .profile-skill {
+  color: var(--prompt-green);
+}
+
+.output .profile-box {
+  color: var(--fg-dim);
+}
 
 /* Train animation for `sl` easter egg */
 .train-container {
