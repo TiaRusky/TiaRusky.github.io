@@ -352,7 +352,7 @@
         if (rafId) cancelAnimationFrame(rafId);
         rafId = null;
         renderStatic();
-      } else {
+      } else if (!document.hidden) {
         isActive = true;
         if (!rafId) render();
       }
