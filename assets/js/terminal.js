@@ -61,6 +61,16 @@
             content: 'Welcome to TiaRuskii portfolio shell.\nType "help" for available commands.'
           }
         }
+      },
+      tools: {
+        type: 'dir',
+        name: 'tools',
+        children: {
+          'SOCGraph': {
+            type: 'file',
+            content: 'SOCGraph forensic investigation tool launcher'
+          }
+        }
       }
     }
   };
@@ -408,6 +418,12 @@
       this.hiddenInput = document.getElementById('hidden-input');
       this.terminal = document.getElementById('terminal');
       this.trainContainer = document.getElementById('train-container');
+      this.appOverlay = document.getElementById('app-overlay');
+      this.appBoot = document.getElementById('app-overlay-boot');
+      this.appFrame = document.getElementById('app-frame');
+      this.appCloseBtn = document.getElementById('app-close-btn');
+      this.appBootText = document.getElementById('app-boot-text');
+      this.appBootBar = document.getElementById('app-boot-bar');
 
       this.username = 'user';
       this.hostname = 'tiaruskii';
@@ -435,6 +451,9 @@
       });
       document.addEventListener('keydown', (e) => this.handleKey(e));
       this.hiddenInput.addEventListener('input', () => this.updateTypedText());
+      if (this.appCloseBtn) {
+        this.appCloseBtn.addEventListener('click', () => this.closeSocGraph());
+      }
     }
 
     focusInput() {
@@ -574,6 +593,11 @@
     }
 
     handleKey(e) {
+      if (this.appOverlay && this.appOverlay.classList.contains('active') && e.key === 'Escape') {
+        e.preventDefault();
+        this.closeSocGraph();
+        return;
+      }
       if (this.isAnimating) {
         e.preventDefault();
         return;
@@ -628,8 +652,15 @@
         case 'sudo': this.cmdSudo(args); break;
         case 'rm': this.cmdRm(args); break;
         case 'sl': this.cmdSl(); break;
+        case 'socgraph':
+          this.cmdSocGraph();
+          break;
         default:
-          this.printLine(command + ': command not found', 'error');
+          if (command && command.endsWith('/socgraph')) {
+            this.cmdSocGraph();
+          } else {
+            this.printLine(command + ': command not found', 'error');
+          }
       }
     }
 
@@ -642,6 +673,7 @@
         '  pwd         Print working directory',
         '  cat         Display file contents',
         '  whoami      Show user profile',
+        '  socgraph    Launch the SOCGraph forensic tool',
         '  clear       Clear the terminal',
         ''
       ];
@@ -932,6 +964,86 @@
         this.trainContainer.classList.remove('active');
         this.trainContainer.innerHTML = '';
       }, 6500);
+    }
+
+    cmdSocGraph() {
+      if (!this.appOverlay || !this.appBoot || !this.appFrame) return;
+      if (this.appOverlay.classList.contains('active')) return;
+
+      this.printLine('Initializing SOCGraph forensic tool...', 'info');
+      this.clearSocGraphTimers();
+
+      this.appOverlay.classList.remove('hidden');
+      this.appOverlay.classList.add('active', 'booting');
+      this.appOverlay.setAttribute('aria-hidden', 'false');
+      this.appFrame.classList.add('hidden');
+      this.appBoot.classList.remove('hidden');
+      this.hiddenInput.blur();
+
+      const reduced = this.isReducedMotion();
+      const bootDuration = reduced ? 0 : 1800;
+      const texts = ['SOCGraph OS v1.0', 'Loading forensic modules...', 'Mounting investigation graph...', 'Ready.'];
+      let idx = 0;
+      this.appBootText.textContent = texts[0];
+
+      let textInterval = null;
+      let barInterval = null;
+      if (bootDuration > 0) {
+        textInterval = setInterval(() => {
+          idx++;
+          if (idx < texts.length) this.appBootText.textContent = texts[idx];
+        }, bootDuration / texts.length);
+      }
+
+      const updateBar = (pct) => {
+        const hashes = '#'.repeat(Math.floor(pct / 5));
+        const spaces = ' '.repeat(20 - Math.floor(pct / 5));
+        this.appBootBar.textContent = `[${hashes}${spaces}] ${Math.floor(pct)}%`;
+      };
+      updateBar(0);
+      let progress = 0;
+      if (bootDuration > 0) {
+        barInterval = setInterval(() => {
+          progress += Math.random() * 5 + 2;
+          if (progress > 100) progress = 100;
+          updateBar(progress);
+        }, 100);
+      }
+
+      this.socGraphTimers = { textInterval, barInterval };
+
+      this.socGraphBootTimeout = setTimeout(() => {
+        this.clearSocGraphTimers();
+        updateBar(100);
+        this.appBoot.classList.add('hidden');
+        this.appOverlay.classList.remove('booting');
+        this.appFrame.classList.remove('hidden');
+        this.appFrame.src = 'tools/SOCGraph/index.html';
+      }, bootDuration + 200);
+    }
+
+    clearSocGraphTimers() {
+      if (this.socGraphTimers) {
+        clearInterval(this.socGraphTimers.textInterval);
+        clearInterval(this.socGraphTimers.barInterval);
+        this.socGraphTimers = null;
+      }
+      if (this.socGraphBootTimeout) {
+        clearTimeout(this.socGraphBootTimeout);
+        this.socGraphBootTimeout = null;
+      }
+    }
+
+    closeSocGraph() {
+      if (!this.appOverlay || !this.appFrame) return;
+      this.clearSocGraphTimers();
+      this.appFrame.src = '';
+      this.appFrame.classList.add('hidden');
+      this.appOverlay.classList.remove('active', 'booting');
+      this.appOverlay.classList.add('hidden');
+      this.appOverlay.setAttribute('aria-hidden', 'true');
+      this.appBoot.classList.add('hidden');
+      this.focusInput();
     }
 
     autocomplete() {
