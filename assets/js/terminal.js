@@ -659,7 +659,7 @@
           this.cmdSocGraph();
           break;
         default:
-          if (command && command.endsWith('/socgraph')) {
+          if (command && (command.endsWith('/socgraph') || command === './socgraph')) {
             this.cmdSocGraph();
           } else {
             this.printLine(command + ': command not found', 'error');
