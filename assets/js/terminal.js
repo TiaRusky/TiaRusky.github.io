@@ -248,7 +248,10 @@
     }
 
     bindEvents() {
-      document.addEventListener('click', () => this.focusInput());
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('a, button, input, select, textarea, [role="button"], [contenteditable]')) return;
+        this.focusInput();
+      });
       document.addEventListener('keydown', (e) => this.handleKey(e));
       this.hiddenInput.addEventListener('input', () => this.updateTypedText());
     }
@@ -515,8 +518,14 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initApp() {
     window.term = new Terminal();
     initSpaceBackground();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 })();
