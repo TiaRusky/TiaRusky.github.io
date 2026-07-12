@@ -438,6 +438,7 @@
 
     updateTypedText() {
       this.typedText.textContent = this.hiddenInput.value;
+      this.scheduleScrollToBottom();
     }
 
     scheduleScrollToBottom() {

@@ -270,6 +270,7 @@ body {
 
 /* Input line */
 .input-line {
+  position: relative;
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
@@ -315,13 +316,14 @@ body {
 
 /* Hidden input */
 .hidden-input {
-  position: fixed;
-  top: -100vh;
-  left: -100vw;
-  opacity: 0.01;
-  width: 10px;
-  height: 10px;
-  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Scrollbar */
