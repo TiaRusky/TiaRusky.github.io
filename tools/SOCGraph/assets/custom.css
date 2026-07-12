@@ -5,8 +5,8 @@
 /* Back-to-terminal button - placed on the top-left to integrate with the top bar */
 #socgraph-back-btn {
   position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
+  bottom: 1rem;
+  right: 1rem;
   z-index: 99999;
   padding: 0.5rem 1rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
