@@ -249,6 +249,8 @@ body {
   overflow-y: auto;
   overflow-x: auto;
   text-shadow: 0 0 3px rgba(0, 229, 255, 0.35);
+  direction: ltr;
+  unicode-bidi: normal;
 }
 
 /* Output area */
@@ -277,6 +279,8 @@ body {
   gap: 0.35rem;
   margin-top: auto;
   padding-top: 0.35rem;
+  direction: ltr;
+  unicode-bidi: normal;
 }
 
 .prompt {
@@ -297,6 +301,8 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
   overflow-wrap: anywhere;
+  direction: ltr;
+  unicode-bidi: normal;
 }
 
 /* Cursor */
@@ -324,6 +330,8 @@ body {
   height: 1px;
   z-index: -1;
   pointer-events: none;
+  direction: ltr;
+  unicode-bidi: normal;
 }
 
 /* Scrollbar */
