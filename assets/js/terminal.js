@@ -433,7 +433,7 @@
     }
 
     focusInput() {
-      this.hiddenInput.focus();
+      this.hiddenInput.focus({ preventScroll: true });
     }
 
     updateTypedText() {
@@ -996,10 +996,9 @@
       this.socGraphBootTimeout = setTimeout(() => {
         this.clearSocGraphTimers();
         updateBar(100);
-        this.appBoot.classList.add('hidden');
-        this.appOverlay.classList.remove('booting');
-        this.appFrame.classList.remove('hidden');
-        this.appFrame.src = 'tools/SOCGraph/index.html?v=12';
+        // Navigate to the standalone SOCGraph page instead of loading it in an iframe.
+        // This gives a clean full-page experience and eliminates the background terminal lag.
+        window.location.href = 'tools/SOCGraph/index.html';
       }, bootDuration + 200);
     }
 
