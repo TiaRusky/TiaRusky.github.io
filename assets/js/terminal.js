@@ -394,6 +394,13 @@
       this.terminal = document.getElementById('terminal');
       this.trainContainer = document.getElementById('train-container');
       this.appOverlay = document.getElementById('app-overlay');
+
+      // Move the hidden input outside the scrollable terminal so the browser
+      // doesn't try to scroll the terminal into view to keep the caret visible.
+      if (this.hiddenInput && this.hiddenInput.parentElement) {
+        document.body.appendChild(this.hiddenInput);
+      }
+
       this.appBoot = document.getElementById('app-overlay-boot');
       this.appFrame = document.getElementById('app-frame');
       this.appCloseBtn = document.getElementById('app-close-btn');
@@ -438,7 +445,11 @@
 
     updateTypedText() {
       this.typedText.textContent = this.hiddenInput.value;
-      this.scheduleScrollToBottom();
+      // Keep the input line pinned at the bottom while typing, even if the
+      // browser tries to auto-scroll to the hidden caret.
+      if (this.terminal) {
+        this.terminal.scrollTop = this.terminal.scrollHeight;
+      }
     }
 
     scheduleScrollToBottom() {
