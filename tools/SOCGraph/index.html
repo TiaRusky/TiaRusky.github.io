@@ -5,19 +5,73 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SOC Investigation Graph</title>
-    <script type="module" crossorigin src="assets/index-DZ2gCYoc.js"></script>
+    <script type="module" crossorigin src="assets/index-Dm-dtmGk.js"></script>
     <link rel="stylesheet" crossorigin href="assets/index-BryOvWxn.css">
     <link rel="stylesheet" href="assets/custom.css">
   </head>
   <body class="m-0 p-0 overflow-hidden bg-zinc-950 text-zinc-100">
-    <button id="socgraph-back-btn" type="button" onclick="history.back()" title="Return to terminal">EXIT [ESC]</button>
+    <button id="socgraph-back-btn" type="button" title="Return to terminal">EXIT [ESC]</button>
     <div id="root"></div>
+
+    <!-- Exit confirmation modal -->
+    <div id="socgraph-exit-modal" class="socgraph-modal" role="dialog" aria-modal="true" aria-labelledby="socgraph-exit-title">
+      <div class="socgraph-modal-content">
+        <h2 id="socgraph-exit-title">Exit SOCGraph</h2>
+        <p>Are you sure you want to exit? Make sure to save your work before leaving.</p>
+        <div class="socgraph-modal-actions">
+          <button id="socgraph-exit-cancel" type="button" class="socgraph-btn socgraph-btn-secondary">Cancel</button>
+          <button id="socgraph-exit-confirm" type="button" class="socgraph-btn socgraph-btn-danger">Exit</button>
+        </div>
+      </div>
+    </div>
+
     <script>
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
+      (function () {
+        var modal = document.getElementById('socgraph-exit-modal');
+        var backBtn = document.getElementById('socgraph-back-btn');
+        var cancelBtn = document.getElementById('socgraph-exit-cancel');
+        var confirmBtn = document.getElementById('socgraph-exit-confirm');
+
+        function openModal() {
+          modal.classList.add('open');
+          cancelBtn.focus();
+        }
+
+        function closeModal() {
+          modal.classList.remove('open');
+          backBtn.focus();
+        }
+
+        function exitApp() {
           history.back();
         }
-      });
+
+        backBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          openModal();
+        });
+
+        cancelBtn.addEventListener('click', closeModal);
+        confirmBtn.addEventListener('click', exitApp);
+
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            if (modal.classList.contains('open')) {
+              e.preventDefault();
+              closeModal();
+            } else {
+              e.preventDefault();
+              openModal();
+            }
+          }
+        });
+      })();
     </script>
   </body>
 </html>

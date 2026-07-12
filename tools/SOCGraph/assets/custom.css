@@ -2,15 +2,15 @@
    SOCGraph custom overrides
    ============================================================ */
 
-/* Back-to-terminal button */
+/* Back-to-terminal button - placed on the top-left to integrate with the top bar */
 #socgraph-back-btn {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: 0.75rem;
+  left: 0.75rem;
   z-index: 99999;
   padding: 0.5rem 1rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #fff;
   background: rgba(255, 95, 86, 0.95);
@@ -29,4 +29,88 @@
 
 #socgraph-back-btn:active {
   transform: scale(0.95);
+}
+
+/* Exit confirmation modal */
+.socgraph-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.socgraph-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.socgraph-modal-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  color: #fafafa;
+  text-align: center;
+}
+
+.socgraph-modal-content h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.socgraph-modal-content p {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #d4d4d8;
+}
+
+.socgraph-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.socgraph-btn {
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.socgraph-btn:hover {
+  transform: translateY(-1px);
+}
+
+.socgraph-btn-secondary {
+  background: #27272a;
+  color: #fafafa;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.socgraph-btn-secondary:hover {
+  background: #3f3f46;
+}
+
+.socgraph-btn-danger {
+  background: rgba(255, 95, 86, 0.95);
+  color: #fff;
+}
+
+.socgraph-btn-danger:hover {
+  background: rgba(255, 95, 86, 1);
 }
