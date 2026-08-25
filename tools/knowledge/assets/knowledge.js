@@ -895,8 +895,9 @@ function setReading(on) {
 // Exit
 // ---------------------------------------------------------------------------
 function exitApp() {
-  if (history.length > 1 && document.referrer) history.back();
-  else window.location.href = '../../index.html';
+  // Navigate straight to the shell. history.back() would step through the
+  // SPA hash history one entry at a time instead of returning to the terminal.
+  window.location.href = '../../index.html';
 }
 
 // ---------------------------------------------------------------------------
