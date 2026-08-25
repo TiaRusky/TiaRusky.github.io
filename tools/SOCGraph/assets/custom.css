@@ -114,3 +114,27 @@
 .socgraph-btn-danger:hover {
   background: rgba(255, 95, 86, 1);
 }
+
+/* ============================================================
+   Larger text on graph nodes and edges
+   ============================================================ */
+
+/* node title: 14px -> 16px */
+.react-flow__node .text-sm {
+  font-size: 1rem;
+}
+
+/* node meta / origin label: 12px -> 14px */
+.react-flow__node .text-xs {
+  font-size: 0.86rem;
+}
+
+/* node badges / footer: 11px -> 14px */
+.react-flow__node .text-\[11px\] {
+  font-size: 0.86rem;
+}
+
+/* edge labels: 10px -> 14px */
+.react-flow__edge-text {
+  font-size: 14px !important;
+}
