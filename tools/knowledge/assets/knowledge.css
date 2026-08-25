@@ -1080,7 +1080,7 @@ body.reading .entry-hero h1 { font-size: 2.3rem; }
 .palette[hidden] { display: none; }
 
 .palette-inner {
-  width: min(780px, 100%);
+  width: min(840px, 100%);
   background: var(--bg-panel-2);
   border: 1px solid var(--border-strong);
   border-radius: 14px;
@@ -1109,13 +1109,13 @@ body.reading .entry-hero h1 { font-size: 2.3rem; }
   outline: none;
   color: var(--prose-strong);
   font-family: var(--font-ui);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
 }
 .palette-input::placeholder { color: var(--prose-faint); }
 .palette-esc { flex-shrink: 0; }
 
-.palette-results { max-height: 55vh; overflow-y: auto; padding: 0.5rem; }
-.palette-results .pr-empty { padding: 1.6rem 1.2rem; color: var(--prose-faint); font-size: 1rem; text-align: center; }
+.palette-results { max-height: 58vh; min-height: 220px; overflow-y: auto; padding: 0.5rem; }
+.palette-results .pr-empty { padding: 3rem 1.2rem; color: var(--prose-faint); font-size: 1.05rem; text-align: center; }
 
 .pr-item {
   display: block;
@@ -1131,7 +1131,7 @@ body.reading .entry-hero h1 { font-size: 2.3rem; }
 .pr-item:hover { background: rgba(0, 168, 255, 0.07); }
 .pr-item.active { background: rgba(0, 168, 255, 0.12); }
 .pr-item-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
-.pr-item-title { font-size: 1.06rem; font-weight: 600; color: var(--prose-strong); }
+.pr-item-title { font-size: 1.12rem; font-weight: 600; color: var(--prose-strong); }
 .pr-item mark { background: none; color: var(--fg); font-weight: 700; }
 .pr-item-domain { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--prose-faint); }
 .pr-item-snippet {
