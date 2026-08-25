@@ -16,6 +16,10 @@
       'SOCGraph': {
         type: 'file',
         content: 'SOCGraph forensic investigation tool launcher'
+      },
+      'knowledge': {
+        type: 'file',
+        content: 'Personal cybersecurity knowledge system launcher'
       }
     }
   };
@@ -435,7 +439,7 @@
       document.addEventListener('keydown', (e) => this.handleKey(e));
       this.hiddenInput.addEventListener('input', () => this.updateTypedText());
       if (this.appCloseBtn) {
-        this.appCloseBtn.addEventListener('click', () => this.closeSocGraph());
+        this.appCloseBtn.addEventListener('click', () => this.closeAppOverlay());
       }
     }
 
@@ -587,7 +591,7 @@
     handleKey(e) {
       if (this.appOverlay && this.appOverlay.classList.contains('active') && e.key === 'Escape') {
         e.preventDefault();
-        this.closeSocGraph();
+        this.closeAppOverlay();
         return;
       }
       if (this.isAnimating) {
@@ -647,9 +651,14 @@
         case 'socgraph':
           this.cmdSocGraph();
           break;
+        case 'knowledge':
+          this.cmdKnowledge();
+          break;
         default:
           if (command && (command.endsWith('/socgraph') || command === './socgraph')) {
             this.cmdSocGraph();
+          } else if (command && (command.endsWith('/knowledge') || command === './knowledge')) {
+            this.cmdKnowledge();
           } else {
             this.printLine(command + ': command not found', 'error');
           }
@@ -666,6 +675,7 @@
         '  cat         Display file contents',
         '  whoami      Show user profile',
         '  socgraph    Launch the SOCGraph forensic tool',
+        '  knowledge   Launch the knowledge base',
         '  clear       Clear the terminal',
         ''
       ];
@@ -959,11 +969,31 @@
     }
 
     cmdSocGraph() {
+      this.launchApp({
+        name: 'SOCGraph',
+        url: 'tools/SOCGraph/index.html',
+        bootTexts: ['SOCGraph OS v1.0', 'Loading forensic modules...', 'Mounting investigation graph...', 'Ready.'],
+        bootDuration: 1800,
+        printText: 'Initializing SOCGraph forensic tool...'
+      });
+    }
+
+    cmdKnowledge() {
+      this.launchApp({
+        name: 'Knowledge',
+        url: 'tools/knowledge/index.html',
+        bootTexts: ['INITIALIZING KNOWLEDGE CORE', 'INDEXING KNOWLEDGE', 'READY'],
+        bootDuration: 600,
+        printText: 'Initializing Knowledge core...'
+      });
+    }
+
+    launchApp(opts) {
       if (!this.appOverlay || !this.appBoot || !this.appFrame) return;
       if (this.appOverlay.classList.contains('active')) return;
 
-      this.printLine('Initializing SOCGraph forensic tool...', 'info');
-      this.clearSocGraphTimers();
+      this.printLine(opts.printText, 'info');
+      this.clearAppTimers();
 
       this.appOverlay.classList.remove('hidden');
       this.appOverlay.classList.add('active', 'booting');
@@ -974,8 +1004,8 @@
       this.hiddenInput.blur();
 
       const reduced = this.isReducedMotion();
-      const bootDuration = reduced ? 0 : 1800;
-      const texts = ['SOCGraph OS v1.0', 'Loading forensic modules...', 'Mounting investigation graph...', 'Ready.'];
+      const bootDuration = reduced ? 0 : opts.bootDuration;
+      const texts = opts.bootTexts || ['Ready.'];
       let idx = 0;
       this.appBootText.textContent = texts[0];
 
@@ -1003,32 +1033,32 @@
         }, 100);
       }
 
-      this.socGraphTimers = { textInterval, barInterval };
+      this.appTimers = { textInterval, barInterval };
 
-      this.socGraphBootTimeout = setTimeout(() => {
-        this.clearSocGraphTimers();
+      this.appBootTimeout = setTimeout(() => {
+        this.clearAppTimers();
         updateBar(100);
-        // Navigate to the standalone SOCGraph page instead of loading it in an iframe.
-        // This gives a clean full-page experience and eliminates the background terminal lag.
-        window.location.href = 'tools/SOCGraph/index.html';
+        // Navigate to the standalone app page. This gives a clean full-page
+        // experience and eliminates the background terminal lag.
+        window.location.href = opts.url;
       }, bootDuration + 200);
     }
 
-    clearSocGraphTimers() {
-      if (this.socGraphTimers) {
-        clearInterval(this.socGraphTimers.textInterval);
-        clearInterval(this.socGraphTimers.barInterval);
-        this.socGraphTimers = null;
+    clearAppTimers() {
+      if (this.appTimers) {
+        clearInterval(this.appTimers.textInterval);
+        clearInterval(this.appTimers.barInterval);
+        this.appTimers = null;
       }
-      if (this.socGraphBootTimeout) {
-        clearTimeout(this.socGraphBootTimeout);
-        this.socGraphBootTimeout = null;
+      if (this.appBootTimeout) {
+        clearTimeout(this.appBootTimeout);
+        this.appBootTimeout = null;
       }
     }
 
-    closeSocGraph() {
+    closeAppOverlay() {
       if (!this.appOverlay || !this.appFrame) return;
-      this.clearSocGraphTimers();
+      this.clearAppTimers();
       this.appFrame.src = '';
       this.appFrame.classList.add('hidden');
       this.appOverlay.classList.remove('active', 'booting');

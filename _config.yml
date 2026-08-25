@@ -13,3 +13,5 @@ exclude:
   - vendor
   - README.md
   - backup
+  # Knowledge sources: the site reads the compiled index (assets/data/knowledge-index.json)
+  - knowledge
