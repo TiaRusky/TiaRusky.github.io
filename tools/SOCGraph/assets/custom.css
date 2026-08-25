@@ -119,22 +119,22 @@
    Larger text on graph nodes and edges
    ============================================================ */
 
-/* node title: 14px -> 16px */
+/* node title: 14px -> 17px */
 .react-flow__node .text-sm {
-  font-size: 1rem;
+  font-size: 1.06rem;
 }
 
-/* node meta / origin label: 12px -> 14px */
+/* node meta / origin label: 12px -> 15px */
 .react-flow__node .text-xs {
-  font-size: 0.86rem;
+  font-size: 0.94rem;
 }
 
-/* node badges / footer: 11px -> 14px */
+/* node badges / footer: 11px -> 15px */
 .react-flow__node .text-\[11px\] {
-  font-size: 0.86rem;
+  font-size: 0.94rem;
 }
 
-/* edge labels: 10px -> 14px */
+/* edge labels: 10px -> 15px */
 .react-flow__edge-text {
-  font-size: 14px !important;
+  font-size: 15px !important;
 }
