@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081019">
+  <title>Reader | TiaRuskii</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📖%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/reader.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../../index.html">← <span class="brand-mark">R</span> READER</a>
+    <div class="top-actions">
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="Attiva modalità chiara">☼</button>
+      <button id="library-button" class="button secondary" type="button">Libreria</button>
+      <label class="button primary upload-label">＋ Aggiungi EPUB<input id="file-input" type="file" accept=".epub,application/epub+zip" hidden></label>
+    </div>
+  </header>
+
+  <main id="app" class="app" aria-live="polite"></main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input id="drop-input" type="file" accept=".epub,application/epub+zip" hidden>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
+  <script src="assets/reader.js?v=1"></script>
+</body>
+</html>

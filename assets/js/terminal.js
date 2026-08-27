@@ -654,6 +654,10 @@
         case 'knowledge':
           this.cmdKnowledge();
           break;
+        case 'reader':
+        case 'epub':
+          this.cmdReader();
+          break;
         default:
           if (command && (command.endsWith('/socgraph') || command === './socgraph')) {
             this.cmdSocGraph();
@@ -676,6 +680,7 @@
         '  whoami      Show user profile',
         '  socgraph    Launch the SOCGraph forensic tool',
         '  knowledge   Launch the knowledge base',
+        '  reader      Launch the local EPUB reader',
         '  clear       Clear the terminal',
         ''
       ];
@@ -975,6 +980,16 @@
         bootTexts: ['SOCGraph OS v1.0', 'Loading forensic modules...', 'Mounting investigation graph...', 'Ready.'],
         bootDuration: 1800,
         printText: 'Initializing SOCGraph forensic tool...'
+      });
+    }
+
+    cmdReader() {
+      this.launchApp({
+        name: 'Reader',
+        url: 'tools/reader/index.html',
+        bootTexts: ['INITIALIZING EPUB READER', 'LOADING LOCAL LIBRARY', 'READY'],
+        bootDuration: 600,
+        printText: 'Initializing EPUB reader...'
       });
     }
 
