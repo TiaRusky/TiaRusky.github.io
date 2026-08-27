@@ -19,7 +19,6 @@ Portfolio interattivo in stile shell Linux, pensato per tracciare il mio percors
 - `whoami` - utente corrente
 - `socgraph` - lancia il tool forense SOCGraph
 - `knowledge` - lancia la knowledge base
-- `reader` - lancia il reader EPUB locale
 - `clear` - pulisce il terminale
 
 ## Easter egg
@@ -44,12 +43,6 @@ e committa sia il `.md` che l'`index.json` rigenerato. Il formato delle entry e 
 semantici supportati (`:::artifact`, `:::tool`, `:::command`, `:::event`, `:::tip`,
 `:::warning`, `:::note`) sono documentati in `knowledge/README.md`.
 
-## Reader EPUB
-
-Il comando `reader` apre `tools/reader/index.html`, una web app standalone per leggere EPUB direttamente nel browser. I file e i metadati restano locali in IndexedDB; sono disponibili libreria, drag & drop, indice, ricerca, posizione automatica, segnalibri, note, evidenziazioni, impostazioni tipografiche e tema chiaro/scuro.
-
-Il reader usa `epub.js` da CDN, quindi per l'apertura dei libri è necessaria una connessione al primo caricamento della pagina. L'app può essere avviata con un semplice server statico (ad esempio GitHub Pages o `npx serve .`).
-
 ## Sviluppo locale
 
-Il sito è pensato per essere ospitato su GitHub Pages. Per testarlo localmente basta aprire `index.html` in un browser moderno; per il reader EPUB è preferibile un server HTTP statico per evitare limitazioni del browser su IndexedDB e risorse locali.
+Il sito è pensato per essere ospitato su GitHub Pages. Per testarlo localmente basta aprire `index.html` in un browser moderno.
