@@ -51,3 +51,11 @@ _drafts/
 .idea/
 *.swp
 *.swo
+
+
+# ============================================================
+# Not Usefull DATA — no commit for these
+# ============================================================
+
+# TMP notes for knowledge base
+knowledge-base/tmp/

@@ -1,5 +1,134 @@
 {
   "version": 1,
-  "count": 0,
-  "entries": []
+  "count": 5,
+  "entries": [
+    {
+      "slug": "acquisizione-dati-windows",
+      "title": "Acquisizione dei dati Windows",
+      "type": "technique",
+      "domain": "DFIR / Windows",
+      "tags": [
+        "dfir",
+        "acquisition",
+        "windows",
+        "triage",
+        "write-blocker"
+      ],
+      "related": [
+        "dfir-fondamenti",
+        "memoria-volatile",
+        "artefatti-windows-da-acquisire"
+      ],
+      "wikilinks": [
+        "Memoria volatile",
+        "Artefatti Windows da acquisire"
+      ],
+      "file": "dfir/acquisizione-dati-windows.md",
+      "dateAdded": 1788009521560.4668,
+      "dateModified": 1788009521560.4668,
+      "excerpt": "L'acquisizione deve preservare il maggior numero possibile di dati nello stato in cui sono stati trovati. In presenza di un host compromesso, evitare di spegnerlo o scollegarlo dall'alimentazione…",
+      "body": "L'acquisizione deve preservare il maggior numero possibile di dati nello stato in cui sono stati trovati. In presenza di un host compromesso, evitare di spegnerlo o scollegarlo dall'alimentazione quando ciò può causare la perdita di informazioni volatili, come chiavi di cifratura, processi e connessioni attive.\n\n## Sequenza consigliata\n\n1. Acquisire un'immagine della RAM, cioè la memoria [[Memoria volatile]].\n2. Verificare se il disco è cifrato.\n3. Creare un'immagine di triage con FTK Imager o KAPE.\n4. Avviare l'analisi di triage.\n5. Acquisire l'intero hard drive solo se necessario.\n\n:::tool\nname: Encrypted Disk Detector (EDD)\ncategory: Disk encryption detection\nuseful_for:\n  - Verificare la cifratura del disco\nurl: https://www.magnetforensics.com/resources/encrypted-disk-detector/\n:::\n\n:::warning\nIl disco logico può apparire non cifrato perché i dati necessari sono già caricati in memoria, mentre il disco fisico è cifrato. Spegnere il computer potrebbe comportare la perdita delle chiavi di cifratura.\n:::\n\n## Write blocker\n\nUn **write blocker** è uno strumento hardware o software che consente accesso in sola lettura ai supporti, impedendo modifiche ai dati durante l'acquisizione forense.\n\nVedi [[Artefatti Windows da acquisire]] per l'elenco dei dati da raccogliere."
+    },
+    {
+      "slug": "artefatti-windows-da-acquisire",
+      "title": "Artefatti Windows da acquisire",
+      "type": "artifact",
+      "domain": "DFIR / Windows",
+      "tags": [
+        "dfir",
+        "windows",
+        "artefatti",
+        "acquisition"
+      ],
+      "related": [
+        "dfir-fondamenti",
+        "categorie-di-evidenza",
+        "acquisizione-dati-windows",
+        "memoria-volatile"
+      ],
+      "wikilinks": [
+        "Memoria volatile",
+        "Acquisizione dei dati Windows"
+      ],
+      "file": "dfir/artefatti-windows-da-acquisire.md",
+      "dateAdded": 1788009547460.9255,
+      "dateModified": 1788009547460.9255,
+      "excerpt": "Durante un'acquisizione di triage Windows è utile includere almeno i seguenti artefatti, adattando la raccolta agli obiettivi dell'indagine e alle condizioni dell'host. name: Windows forensic…",
+      "body": "Durante un'acquisizione di triage Windows è utile includere almeno i seguenti artefatti, adattando la raccolta agli obiettivi dell'indagine e alle condizioni dell'host.\n\n:::artifact\nname: Windows forensic acquisition set\nlocation: Host filesystem and Windows Registry\nplatform: Windows\nuseful_for:\n  - Ricostruzione della timeline\n  - Analisi dell'esecuzione dei programmi\n  - Analisi degli account e della configurazione\n  - Ricerca di file recenti e attività utente\n:::\n\n## File system e timeline\n\n- `$MFT`\n- `$LogFile`\n- `$UsnJrnl:$J`\n- Cartella home dell'utente\n- Cartella Recent e relative sottocartelle\n\n## Registry hive\n\n- `SAM`\n- `SYSTEM`\n- `SOFTWARE`\n- `DEFAULT`\n- `NTUSER.DAT`\n- `UsrClass.dat` / `USERCLASS.DAT`\n\n## Eventi e tracce di esecuzione\n\n- File `*.evtx`\n- File `*.lnk`\n- File Prefetch `*.pf`\n\n## Memoria virtuale e dati di recupero\n\n- `pagefile.sys`\n- `hiberfil.sys`\n- `memory.dmp`\n\nQuesti artefatti devono essere interpretati insieme: una singola evidenza raramente è sufficiente a dimostrare un'attività. Per i dati che possono scomparire con lo spegnimento, consultare [[Memoria volatile]] e seguire la strategia descritta in [[Acquisizione dei dati Windows]]."
+    },
+    {
+      "slug": "categorie-di-evidenza",
+      "title": "Categorie di evidenza",
+      "type": "concept",
+      "domain": "DFIR",
+      "tags": [
+        "dfir",
+        "evidenza",
+        "artefatti"
+      ],
+      "related": [
+        "dfir-fondamenti",
+        "artefatti-windows-da-acquisire"
+      ],
+      "wikilinks": [
+        "Fondamenti di DFIR"
+      ],
+      "file": "dfir/categorie-di-evidenza.md",
+      "dateAdded": 1788009513114.6377,
+      "dateModified": 1788009513114.6377,
+      "excerpt": "Le categorie di evidenza aiutano a classificare le domande investigative e gli artefatti da cercare. Le principali categorie sono: User Communication File Download Program Execution File Opening File…",
+      "body": "Le categorie di evidenza aiutano a classificare le domande investigative e gli artefatti da cercare. Le principali categorie sono:\n\n- User Communication\n- File Download\n- Program Execution\n- File Opening\n- File Knowledge\n- Physical Location\n- USB Key Usage\n- Account Usage\n- Browser Usage\n\nLa stessa attività può appartenere a più categorie e può essere rappresentata da diversi artefatti. La classificazione va quindi usata come guida alla ricerca, non come separazione rigida delle evidenze.\n\nVedi [[Fondamenti di DFIR]] per il contesto generale dell'analisi degli artefatti."
+    },
+    {
+      "slug": "dfir-fondamenti",
+      "title": "Fondamenti di DFIR",
+      "type": "concept",
+      "domain": "DFIR",
+      "tags": [
+        "dfir",
+        "digital-forensics",
+        "incident-response",
+        "artefatti"
+      ],
+      "related": [
+        "categorie-di-evidenza",
+        "acquisizione-dati-windows",
+        "memoria-volatile"
+      ],
+      "wikilinks": [
+        "Categorie di evidenza",
+        "Acquisizione dei dati Windows"
+      ],
+      "file": "dfir/dfir-fondamenti.md",
+      "dateAdded": 1788009503079.44,
+      "dateModified": 1788009503079.44,
+      "excerpt": "Il processo di DFIR (Digital Forensics and Incident Response) riguarda l'analisi degli artefatti lasciati dalle azioni degli utenti, dal sistema operativo o da eventuali avversari, con l'obiettivo di…",
+      "body": "Il processo di **DFIR** (*Digital Forensics and Incident Response*) riguarda l'analisi degli artefatti lasciati dalle azioni degli utenti, dal sistema operativo o da eventuali avversari, con l'obiettivo di ricostruire una compromissione e la sequenza degli eventi.\n\nL'analisi non consiste soltanto nell'estrarre artefatti: è necessario correlare le evidenze e formulare le domande corrette per stabilire dove cercare le informazioni mancanti.\n\n## Artefatti\n\nEsempi di artefatti Windows includono eventi di sistema, registri, la tabella MFT, Prefetch e hive del Registry. Uno stesso evento può produrre più artefatti associati; per questo è importante considerarli nel loro insieme e valutarne la coerenza temporale.\n\n## Obiettivo dell'analisi\n\nL'obiettivo è identificare la sequenza di azioni che si sono susseguite, distinguendo ciò che è stato eseguito dall'utente, dal sistema o da un possibile malware.\n\nVedi anche [[Categorie di evidenza]] e [[Acquisizione dei dati Windows]]."
+    },
+    {
+      "slug": "memoria-volatile",
+      "title": "Memoria volatile",
+      "type": "artifact",
+      "domain": "DFIR / Windows",
+      "tags": [
+        "dfir",
+        "volatile-data",
+        "ram",
+        "memory-forensics",
+        "windows"
+      ],
+      "related": [
+        "acquisizione-dati-windows",
+        "artefatti-windows-da-acquisire"
+      ],
+      "wikilinks": [
+        "Acquisizione dei dati Windows"
+      ],
+      "file": "dfir/memoria-volatile.md",
+      "dateAdded": 1788009536903.8691,
+      "dateModified": 1788009536903.8691,
+      "excerpt": "La memoria volatile contiene informazioni che possono andare perse quando l'host viene spento. La RAM può rivelare dati non osservabili attraverso il solo triage di un'immagine disco. name: RAM…",
+      "body": "La memoria volatile contiene informazioni che possono andare perse quando l'host viene spento. La RAM può rivelare dati non osservabili attraverso il solo triage di un'immagine disco.\n\n:::artifact\nname: RAM\nlocation: Physical memory of the host\nplatform: Windows\nuseful_for:\n  - Processi in esecuzione\n  - Connessioni di rete\n  - File, directory e registri aperti\n  - Credenziali in chiaro\n  - Malware fileless\n:::\n\n## Altri dati volatili\n\n- Connessioni di rete attive\n- Applicazioni in esecuzione\n- Porte aperte\n- Handle e risorse utilizzate dai processi\n\n## Acquisizione da un host attivo\n\nL'acquisizione può essere effettuata con strumenti di RAM image acquisition. FTK Imager e Capture Memory sono esempi di strumenti utilizzabili. È preferibile eseguire il tool da un supporto USB esterno e salvare il dump su un supporto separato, riducendo l'impatto sull'host e preservando le aree non allocate potenzialmente utili al recupero di file precedenti.\n\n## Acquisizione da un sistema spento\n\nQuando si dispone soltanto del disco è possibile esaminare file che possono contenere una rappresentazione parziale della memoria:\n\n- `hiberfil.sys`: snapshot della RAM generata durante l'ibernazione;\n- `pagefile.sys`: memoria virtuale usata quando la RAM è piena, potenzialmente contenente tracce di navigazione o chiavi di cifratura;\n- `memory.dmp`: dump prodotto in seguito a un crash del sistema.\n\n:::tool\nname: FTK Imager\ncategory: Forensic acquisition\nuseful_for:\n  - Acquisizione di immagini RAM e disco\n:::\n\n:::tool\nname: Capture Memory\ncategory: RAM acquisition\nuseful_for:\n  - Acquisizione della memoria volatile\n:::\n\nVedi [[Acquisizione dei dati Windows]] per la sequenza complessiva di preservazione e raccolta."
+    }
+  ]
 }
