@@ -61,6 +61,51 @@
     <iframe id="app-frame" class="app-frame hidden" src="" title="SOCGraph Application" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-popups allow-downloads"></iframe>
   </div>
 
+  <!-- Browser-side jq workspace -->
+  <section id="jq-workspace" class="jq-workspace" aria-labelledby="jq-title">
+    <div class="jq-header">
+      <div>
+        <p class="jq-eyebrow">LOCAL JSON PROCESSOR</p>
+        <h1 id="jq-title">jq online</h1>
+        <p class="jq-subtitle">Transform JSON privately in your browser. No upload, no backend.</p>
+      </div>
+      <button id="jq-close" class="jq-icon-button" type="button" aria-label="Close jq workspace">×</button>
+    </div>
+    <div class="jq-toolbar">
+      <label class="jq-file-button" for="jq-file">📂 Load JSON file</label>
+      <input id="jq-file" type="file" accept=".json,application/json,text/json">
+      <button id="jq-format" type="button">Format input</button>
+      <button id="jq-clear" type="button">Clear</button>
+      <span id="jq-file-info" class="jq-file-info">Paste JSON or load a file · processed locally with jq 1.6 WASM</span>
+    </div>
+    <div class="jq-grid">
+      <div class="jq-panel">
+        <div class="jq-panel-title"><span>INPUT JSON</span><span id="jq-input-size">0 B</span></div>
+        <textarea id="jq-input" spellcheck="false" placeholder='{"events": [{"type": "login"}]}' aria-label="JSON input"></textarea>
+      </div>
+      <div class="jq-panel jq-filter-panel">
+        <div class="jq-panel-title"><span>JQ FILTER</span><span class="jq-hint">Ctrl/Cmd + Enter</span></div>
+        <input id="jq-filter" value="." spellcheck="false" aria-label="jq filter">
+        <div class="jq-examples">
+          <button type="button" data-jq-filter=".">identity</button>
+          <button type="button" data-jq-filter=".[]">array items</button>
+          <button type="button" data-jq-filter="{name, email}">pick fields</button>
+          <button type="button" data-jq-filter="map(select(.active == true))">filter array</button>
+        </div>
+        <button id="jq-run" class="jq-run-button" type="button">▶ Run jq</button>
+        <p class="jq-security-note">⚡ Runs locally with a jq-compatible engine. Your JSON never leaves this device.</p>
+      </div>
+      <div class="jq-panel jq-output-panel">
+        <div class="jq-panel-title"><span>OUTPUT</span><span id="jq-output-status">Ready</span></div>
+        <pre id="jq-output" aria-live="polite">Run a filter to see the result.</pre>
+        <button id="jq-download" class="jq-download-button" type="button" disabled>Download output</button>
+      </div>
+    </div>
+  </section>
+
+  <button id="jq-open" class="jq-open-button" type="button">⌘ jq online</button>
+
   <script src="assets/js/terminal.js?v=12"></script>
+  <script src="assets/js/jq-workspace.js?v=1"></script>
 </body>
 </html>
